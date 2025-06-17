@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Cercle de fond -->
+    <circle cx="100" cy="100" r="90" fill="#4a90e2"/>
+    
+    <!-- Voiture stylisée -->
+    <path d="M60 120 C60 120, 70 120, 80 120 C90 120, 100 110, 110 110 C120 110, 130 120, 140 120 C150 120, 160 120, 160 120 L160 100 C160 100, 150 90, 140 90 L60 90 C50 90, 40 100, 40 100 L40 120 C40 120, 50 120, 60 120 Z" fill="white"/>
+    
+    <!-- Roues -->
+    <circle cx="70" cy="120" r="15" fill="#343a40"/>
+    <circle cx="70" cy="120" r="8" fill="white"/>
+    <circle cx="130" cy="120" r="15" fill="#343a40"/>
+    <circle cx="130" cy="120" r="8" fill="white"/>
+    
+    <!-- Vitres -->
+    <path d="M70 90 L70 70 L130 70 L130 90" fill="#4a90e2"/>
+    
+    <!-- Phares -->
+    <circle cx="50" cy="100" r="5" fill="#ffc107"/>
+    <circle cx="150" cy="100" r="5" fill="#ffc107"/>
+    
+    <!-- Texte IFRI -->
+    <text x="100" y="160" font-family="Arial" font-size="24" font-weight="bold" fill="white" text-anchor="middle">IFRI</text>
+</svg> 
