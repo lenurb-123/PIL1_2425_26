@@ -67,20 +67,20 @@ Application web de covoiturage pour les étudiants de l’IFRI, conçue dans le 
 
 1. **Cloner le dépôt :**
 
-'''bash
+```bash
 git clone https://github.com/lenurb-123/PIL1_2425_26.git
 cd PIL1_2425_26
 
 2. **Créer  un environnement virtuel et l'activer :**
 
-'''bash
+```bash
 python -m venv venv 
 source venv/bin/activate # Linux/MacOS
 venv/Scripts/activate  
 
 3. **Installer les dépendances :**
 
-'''bash
+```bash
 pip install -r requirements.txt
 
 
@@ -95,12 +95,12 @@ ___
 
 2. **Importer le fichier**
 
-'''bash
+```bash
 mysql -u root -p ifri_comotorage < db/structure.sql
 
 3. **Modifier le fichier settings.py:**
 
-'''python
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -121,7 +121,7 @@ DATABASES = {
 
 - **Modifier le fichier settings.py:**
   
-'''python
+```python
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -135,7 +135,7 @@ DATABASES = {
 
 ## :arrow_forward: Démarrer le projet 
 
-'''bash
+```bash
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
@@ -145,7 +145,7 @@ python manage.py createsuperuser
 
 ## :airplane: Lancer le projet 
 
-'''bash
+```bash
 python manage.py runserver
 
 ## Ouvre le navigateur 
