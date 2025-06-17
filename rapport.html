@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title> Rapport du projet IFRI_comotorage</title>
+</head>
+<style>
+    /* Animation de soulignement depuis le centre */
+    .nav-link {
+        position: relative;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #fff;
+        transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+    .nav-link:hover {
+        color: #ffffff;
+        /* optionnel : couleur au survol */
+    }
+
+    /* Pour que le contenu s'étale bien sur toute la largeur */
+    .navbar-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* --- STYLE GÉNÉRAL DES LIENS DE NAVIGATION --- */
+    .nav-link,
+    .dropdown-item {
+        position: relative;
+        color: #fffefe;
+        padding: 0.5rem 1rem;
+        transition: color 0.3s ease;
+    }
+
+    /* --- LIGNE DE SOULIGNEMENT DYNAMIQUE --- */
+    .nav-link::after,
+    .dropdown-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background-color: #060606;
+        transition: width 0.3s ease, left 0.3s ease;
+    }
+
+    /* --- ANIMATION AU SURVOL --- */
+    .nav-link:hover::after,
+    .dropdown-item:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+    /* --- COULEUR DE TEXTE AU SURVOL --- */
+    .nav-link:hover,
+    .dropdown-item:hover {
+        color: #000000;
+    }
+</style>
+
+<body>
+    <div class="container bg-dark justify-content-between d-flex align-items-center">
+        <p class="h3 text-white "><a href="#members" class="nav-link"> PIL1_2425_26 </a></p>
+        <p class="h3 text-white "><a href="#fonctions" class="nav-link">IFRI_comotorage
+                <img src="assets/img/logo.svg" alt="" class="img-fluid"></a>
+        </p>
+    </div>
+    <div class="container container-md-fluid my-2">
+        <nav class="navbar navbar-expand-lg bg-dark bg-opacity-75 navbar-dark">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menu">
+                    <ul class="navbar-nav d-flex flex-row w-100 justify-content-between ">
+                        <li class="nav-item"><a href="#" class="nav-link"> Accueil </a></li>
+                        <li class="nav-item dropdown">
+                            <a href="#members" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Membres</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#felix" class="dropdown-item">TOVIGNAN Félix</a></li>
+                                <li><a href="#brunel" class="dropdown-item">KPOGBEME Brunel</a></li>
+                                <li><a href="#grace" class="dropdown-item">FAKEYE Grâce</a></li>
+                                <li><a href="#best" class="dropdown-item">VLAVONOU Best</a></li>
+                                <li><a href="#ulrich" class="dropdown-item">BAMIGBOLA Ulrich</a></li>
+                                <li><a href="#serge" class="dropdown-item">DADEOU Serge</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a href="#instructions" class="nav-link"> Instructions </a></li>
+                        <li class="nav-item"><a href="#fonctions" class="nav-link">Responsabilités</a></li>
+                        <li class="nav-item"><a href="#description" class="nav-link">Description</a></li>
+                        <li class="nav-item"><a href="#readme" class="nav-link">README.md</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container alert alert-dark text-center my-2">
+        <h3 class="text-white text-center bg-success" id="membres">Membres du groupe PIL1_2425_26</h3>
+        <p class="h5"> Le groupe PIL1_2425_26 est composé d'etudiants mixtes afin de réaliser un projet nommé IFRI_comotorage. <br>
+            Une équipe soudée, motivée et passionnée par la réussite de ce projet collaboratif. <br>
+            Içi suivent les étudiants concernés </p>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border">
+                    <h4> TOVIGNAN Félix</h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation de Sécurité Informatique  <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : VISCHENZISCH
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border">
+                    <h4> KPOGBEME  Brunel </h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation d'Intelligence Artificielle <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : lenurb-123
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border">
+                    <h4> FAKEYE Grâce</h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation de Systèmes Embarqués et Internet des Objets <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : CodexGratia-10
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border">
+                    <h4> VLAVONOU Best</h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation d'internet et Multimédia   <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : bestvln
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border">
+                    <h4> BAMIGBOLE Ulrich</h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation d'Intelligence Artificielle <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : Ulk-bm2k25
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3 ">
+                    <h4> DADEOU Serge</h1>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique. <br>
+                            En formation de Génie Logiciel  <br>
+                            Profil <img src="assets/img/GitHub-Mark.png" alt="" width="20px" height="20px"> : Serge123-ai
+                        </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="container my-2 bg-secondary text-center text-light p-3 " id="fonctions">
+        <p class="h3 bg-success"> Responsabilités</p>
+        <div class="container">
+            <h3 class="bg-primary bg-opacity-50"> Mode de fonctionnement </h3>
+            <p class="h5">Dans la réalisation de ce projet denommée IFRI_comotorage ; une répartition presque équitable a été
+                operée
+                afin de permettre un bon déroulement et de répondre aux critères du projet. Ceci s'est donc etabli par
+                la création d'un groupe Whatsapp
+                afin d'assurer la répartition des tâches et de les recevoir; ou même discuter sur les divers problèmes
+                rencontrés . Ces problèmes sont réglés sur le champ à travers les discussions via le groupe lorsqu'elles
+                relèvent d'un problème technique ou d'installation de dépendances. Dans certains cas où les problèmes
+                sont plutôt costauds et robustes et nécessitent une réflexion plus poussée; des réunions sont organisées en
+                présentiel afin d'y trouver une solution optimale et collective. Avec cet air convivial, amical et
+                surtout instructif nous avons pu mener à bout la réalisation du projet à travers des installations de
+                paquets( pip , pyvenv , pillow ,etc), de logiciels(MySQL Workbench , MySQL Server ,etc) et de prise en
+                connaissances de frameworks (Django , Bootstrap , etc) .
+            </p>
+            <p class="h5"> Chaque membre a ainsi joué un rôle considérable et un apport dans la réalisation du projet. </p>
+        </div>
+
+        <div class="container">
+            <h3 class="bg-success text-center"> Rôles et contributions </h3>
+            <div class="row">
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border" id="felix">
+                    <h4> TOVIGNAN Félix</h1>
+                        <p> 
+                            En formation de Sécurité Informatique, il est le chef du groupe qui a assuré la coordination des travaux dans le groupe.
+                            Il a essentiellement travaillé sur la partie backend du projet, en mettant en place les modèles de données et les vues nécessaires pour la gestion des trajets et des utilisateurs. IL a également contribué à la configuration de la base de données et à l'intégration des fonctionnalités de messagerie instantannée. <br>
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border" id="brunel">
+                    <h4> KPOGBEME Brunel </h4>
+                        <p>
+                            En formation d'Intelligence Artificielle , endossant le rôle du testeur il a été responsable de la mise en place de l'algorithme de matching entre les conducteurs et les passagers. Il a également travaillé sur l'optimisation des requêtes de recherche de trajets et la gestion des préférences des utilisateurs. Il est également le rédacteur du rapport et du README. <p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border" id="grace">
+                    <h4> FAKEYE Grâce</h4>
+                        <p> En formation de Systèmes Embarqués et Internet des Objets, elle a contribué à la conception de l'interface utilisateur et à l'intégration des fonctionnalités pour une experience utilsateur fluide. Elle a également travaillé sur le visuel de l'application pour une présentation attrayante et intuitive de ce dernie,avec l'utilisation de HTML et Css et des frameworks comme Django.
+                        </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border" id="best">
+                    <h4> VLAVONOU Best </h4>
+                        <p> En formation d'internet et Multimédia, il a été chargé de la création des maquettes graphiques de l'application. Il a également travaillé sur l'intégration des éléments visuels et la mise en forme des pages web à l'aide de HTML et Css. </P>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3  border" id="ulrich">
+                    <h4> BAMIGBOLA Ulrich</h4>
+                        <p> Etudiant en 1ère année de Licence Professionnelle en Informatique et plus précisemennt en Intelligence Artificielle,il a contribué au front-end de l'application en apportant des améliorations à l'interface utilsateur pour un visuel plus attractif de l'application. </p>
+                </div>
+                <div class="col-6 col-md-6 bg-dark text-center text-light p-3 border " id="serge">
+                    <h4> DADEOU Serge </h4>
+                        <p> Etudiant en première année de Génie Logiciel, il a été responsable de la gestion des comptes utilisateurs en apportants des améliorations à la page de profil utilisateur.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="container my-2  alert alert-dark  p-3" id="description">
+        <h3 class="bg-success text-center"> Description</h3>
+        <p class="justify-content-start text-start h5">Le projet IFRI_comotorage consiste à réaliser une application web qui met en relation les
+            étudiants de l’IFRI souhaitant partager leurs trajets quotidiens entre leur domicile et le
+            campus. Dénommé IFRI_comotorage, chaque utilisateur crée un profil (point de départ
+            habituel, horaires, etc.) et peut publier ou rechercher des offres / demandes de
+            covoiturage. Un algorithme de matching — basé sur la proximité géographique et la
+            compatibilité horaire — propose automatiquement les combinaisons conducteur-
+            passager les plus pertinentes, tandis qu’une messagerie intégrée permet d’affiner les
+            détails du rendez-vous.L’application devra disposer d’interfaces graphiques web communiquant avec une base
+            de données suivant le modèle client-serveur. Elle devra disposer des modules qui suivent
+            : gestion des comptes et profils utilisateur ,  mise en correspondance des conducteurs et passagers , messagerie instantanée.
+            Le projet est structuré de manière modulaire, avec des composants distincts pour la gestion des utilisateurs, la recherche de trajets, et la messagerie. Chaque module est développé en utilisant Django pour le backend et Bootstrap pour le frontend, assurant ainsi une interface utilisateur réactive et intuitive. La base de données MySQL est utilisée pour stocker les informations des utilisateurs, les trajets, et les messages échangés.  <br>
+            Le projet contient donc trois applications principales : l'application comptes pour les connexions et inscriptions, l'application trajets pour la gestion des trajets et l'application discussions pour la communication entre les utilisateurs. Chaque application est développée en suivant les principes du modèle MVC (Modèle-Vue-Contrôleur), assurant ainsi une séparation claire des préoccupations et facilitant la maintenance et l'évolution de l'application. <br>
+        </p>
+        <div class="container"> 
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-12  border border-dark border-3 border-end-0 border-start-0 border-md">
+                    <p class="w-100 alert alert-primary text-center h4" >🏗️ Structure générale du projet</p>
+                    <div class="container mt-4">
+                        <button id="toggleAll" class="btn btn-dark btn-opacity-50 mb-3" type="button">
+                            Arborescence du projet
+                        </button>
+                        <div id="structureTitle" class="h5 mb-3 collapse show collapse-root">
+                            <p class="text-center align-self-stretch">Le projet IFRI_comotorage est une application web de covoiturage dédiée aux étudiants de l’IFRI. Il suit une
+                                architecture client-serveur classique, organisée de la manière suivante . Cette arborescence relève du modèle déployé sur notre site <a href="https://github.com/lenurb-123/PIL1_2425_26.git" class="nav-link">github</a> Ceci n'est qu'une brève présentation de l'arborescence .</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseRoot" role="button"
+                                    aria-expanded="true" aria-controls="collapseRoot">
+                                    IFRI_comotorage/
+                                </a>
+                            </div>
+                            <div class="collapse show collapse-root" id="collapseRoot">
+                                <ul class="list-group list-group-flush ms-3">
+                                    <!-- Backend -->
+                                    <li class="list-group-item">
+                                        <a data-bs-toggle="collapse" href="#collapseBackend" role="button" aria-expanded="false"
+                                            aria-controls="collapseBackend">
+                                            comptes/
+                                        </a>
+                                        <div class="collapse collapse-root" id="collapseBackend">
+                                            <ul class="list-group ms-3">
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseModels" role="button"
+                                                        aria-expanded="false" aria-controls="collapseModels">
+                                                        migrations/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseModels">
+                                                        <span class="text-muted ms-3"># Modèles de données</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseViews" role="button"
+                                                        aria-expanded="false" aria-controls="collapseViews">
+                                                        templates/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseViews">
+                                                        <span class="text-muted ms-3"># Logique métier (routes, contrôleurs)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseStatic" role="button"
+                                                        aria-expanded="false" aria-controls="collapseStatic">
+                                                        static/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseStatic">
+                                                        <span class="text-muted ms-3"># Fichiers statiques (CSS, JS)</span>
+                                                    </div>
+                                                </li>
+                                                </li>
+                                                <li class="list-group-item">
+                                                admin.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                models.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                forms.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                views.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                urls.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <!-- Frontend -->
+                                    <li class="list-group-item">
+                                        <a data-bs-toggle="collapse" href="#collapseFrontend" role="button" aria-expanded="false"
+                                            aria-controls="collapseFrontend">
+                                            discussions/
+                                        </a>
+                                        <div class="collapse collapse-root" id="collapseFrontend">
+                                            <ul class="list-group ms-3">
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapsePages" role="button"
+                                                        aria-expanded="false" aria-controls="collapsePages">
+                                                        migrations/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapsePages">
+                                                        <span class="text-muted ms-3"># Modèles de données</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseAssets" role="button"
+                                                        aria-expanded="false" aria-controls="collapseAssets">
+                                                        templates/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseAssets">
+                                                        <span class="text-muted ms-3"># Logique métier (routes, contrôleurs)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseJs" role="button" aria-expanded="false"
+                                                        aria-controls="collapseJs">
+                                                        static/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseJs">
+                                                        <span class="text-muted ms-3"># Fichiers statiques (CSS, JS)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                admin.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                models.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                forms.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                views.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                urls.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    <li class="list-group-item">
+                                        <a data-bs-toggle="collapse" href="#collapseFrontend" role="button" aria-expanded="false"
+                                            aria-controls="collapseFrontend">
+                                            trajets/
+                                        </a>
+                                        <div class="collapse collapse-root" id="collapseFrontend">
+                                            <ul class="list-group ms-3">
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapsePages" role="button"
+                                                        aria-expanded="false" aria-controls="collapsePages">
+                                                        migrations/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapsePages">
+                                                        <span class="text-muted ms-3"># Modèles de données</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseAssets" role="button"
+                                                        aria-expanded="false" aria-controls="collapseAssets">
+                                                        templates/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseAssets">
+                                                        <span class="text-muted ms-3"># Logique métier (routes, contrôleurs)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseJs" role="button" aria-expanded="false"
+                                                        aria-controls="collapseJs">
+                                                        static/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseJs">
+                                                        <span class="text-muted ms-3"># Fichiers statiques (CSS, JS)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                admin.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                models.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                forms.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                views.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                urls.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <a data-bs-toggle="collapse" href="#collapseFrontend" role="button" aria-expanded="false"
+                                            aria-controls="collapseFrontend">
+                                            IFRI_comotorage/
+                                        </a>
+                                        <div class="collapse collapse-root" id="collapseFrontend">
+                                            <ul class="list-group ms-3">
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapsePages" role="button"
+                                                        aria-expanded="false" aria-controls="collapsePages">
+                                                        migrations/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapsePages">
+                                                        <span class="text-muted ms-3"># Modèles de données</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseAssets" role="button"
+                                                        aria-expanded="false" aria-controls="collapseAssets">
+                                                        templates/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseAssets">
+                                                        <span class="text-muted ms-3"># Logique métier (routes, contrôleurs)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <a data-bs-toggle="collapse" href="#collapseJs" role="button" aria-expanded="false"
+                                                        aria-controls="collapseJs">
+                                                        static/
+                                                    </a>
+                                                    <div class="collapse collapse-root" id="collapseJs">
+                                                        <span class="text-muted ms-3"># Fichiers statiques (CSS, JS)</span>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item">
+                                                asgi.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                settings.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                urls.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                                <li class="list-group-item">
+                                                wsgi.py<span class="text-muted"># Base de données</span>
+                                                </li>
+                                    <!-- Fichiers racine -->
+                                    <li class="list-group-item">
+                                        manage.py<span class="text-muted"># Fichier de gestion du projet</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        requirements.txt <span class="text-muted"># Dépendances Python</span>
+                                    </li>
+                                </ul>
+                                <li class="list-group-item">
+                                    README.md <span class="text-muted"># Description du projet</span>
+                                </li>
+                            </div>
+                        </div>
+                        <div class="card-header">
+                                <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseProjets" role="button" aria-expanded="true"
+                                    aria-controls="collapseProjets">
+                                    db/
+                                </a>
+                                    <li class="list-group-item">
+                                        structure.sql<span class="text-muted"># Fichier de bases de données</span>
+                                    </li>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-12 col-md-6 col-lg-12 border border-warning border-3 border-end-0 border-start-0 my-2 border-md">
+                    <p class="w-100  alert alert-primary text-center h4"> 🗃️ Modèle de base de données relationnelle </p>
+                    <p class="justify-content-start text-start text-center h5"> La base de données suit une structure logique adaptée au domaine du covoiturage. <br>
+                        Elle est conçue pour stocker les informations des utilisateurs, les trajets, les réservations et les messages échangés entre les utilisateurs. <br>
+                        Chaque table est liée par des clés étrangères pour assurer l'intégrité des données et faciliter les requêtes complexes. <br>
+                        Voici un aperçu de la structure de la base de données des tâbles principales utilisées dans le projet IFRI_comotorage : <br>
+                    </p>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th> Table </th>
+                                <th> Decription</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> Utilisateurs</td>
+                                <td> Informations des membres (nom, rôle, email, mot de passe hashé, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td>Trajets </td>
+                                <td>	Informations sur les trajets proposés (lieu départ, lieu arrivée, date, heure, conducteur_id) </td>
+                            </tr>
+                            <tr>
+                                <td> Réservations</td>
+                                <td>	Lien entre passagers et trajets réservés</td>
+                            </tr>
+                            <tr>
+                                <td> Messagerie </td>
+                                <td> Messagerie instantanée entre passager et conducteur</td>
+                            </tr>
+                        </tbody>
+                    </table>
+    
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-12 border border-success border-3 border-end-0 border-start-0 my-2 border-md">
+                    <p class="w-100  alert alert-primary text-center h4"> 🔐 Gestion des comptes & rôles</p>
+                    <p class="justify-content-start text-start text-center h5"> Le projet gère les comptes utilisateurs avec des rôles distincts (conducteur, passager). <br>
+                        Chaque utilisateur peut créer un compte, se connecter et gérer son profil. <br>
+                        Les conducteurs peuvent publier des trajets, tandis que les passagers peuvent rechercher et réserver des trajets. <br>
+                        La sécurité est assurée par le hachage des mots de passe et la validation des entrées utilisateur. De plus , la base est renforcée par des fonctions de contrôles de doublons d'identifiants et de vérification des données saisies lors de l'inscription. <br>
+                        Un choix de connexion avec votre compte Google est aussi disponible pour une meilleure expérience utilisateur. <br>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-12 border border-info border-3 border-end-0 border-start-0 my-2 border-md">
+                    <p class="w-100  alert alert-primary text-center h4"> 💬 Messagerie instantanée</p>
+                    <p class="justify-content-start text-start text-center h5"> Le projet intègre une messagerie instantanée pour faciliter la communication entre les utilisateurs. <br>
+                        Les passagers peuvent envoyer des messages aux conducteurs pour discuter des détails du trajet, poser des questions ou confirmer leur réservation. <br>
+                        La messagerie est sécurisée et permet de conserver un historique des échanges pour chaque trajet. <br>
+                        Cette fonctionnalité améliore l'expérience utilisateur en permettant une communication directe et rapide entre les parties concernées.
+                    </p>
+                </div>
+
+                <div class="col col-md-12 col-lg-12 border border-danger border-3 border-end-0 border-start-0 my-2 border-md">
+                    <p class="w-100 alert alert-primary text-center h4"> ⚙️Fonctionnement du Matching</p>
+                    <p class="justify-content-start text-start text-center h5">
+                        Le projet utilise un algorithme de matching pour associer les conducteurs et les passagers en fonction de leur proximité géographique et de leurs horaires. <br>
+                        Lorsqu'un conducteur publie un trajet, l'algorithme recherche les passagers dont les points de départ et d'arrivée sont compatibles avec le trajet proposé. <br>
+                        Les passagers peuvent également rechercher des trajets en fonction de leurs préférences (lieu, heure, etc.). <br>
+                        L'algorithme prend en compte les préférences des utilisateurs pour proposer les correspondances les plus pertinentes. <br>
+                        Le système de recherche repose sur une comparaison des lieux de départ et d’arrivée renseignés par le passager avec ceux
+                        des trajets disponibles en base.
+                        L'algorithme applique le lower() aux chaînes de caractères pour éviter les erreurs de casse.
+                    </p>
+                </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container my-2 bg-secondary text-center p-3 text-light h5" id="instructions">
+        <h3 class="bg-success text-center h3"> Instructions </h3>
+        <p > Dans cette rubrique nous vous montrerons ou plutôt guiderons à travers le déploiement de notre projet.</p>
+        <div class="row">
+            <div class=" col col-lg-12 col-md-6 border border-3 border-black border-start-0 border-end-0 h5 my-2">
+                <p class="w-100 text-center alert alert-primary h4"> Prérequis pour le déploiement </p>
+                <ol>
+                    <li class="text-start"> Installer Python  sur son système est crucial pour exécuter le projet IFRI_comotorage.  
+                        <ul>
+                            <li> Pour Windows, télécharger l'installeur depuis le site officiel de Python. Pour le telechargement, cliquez sur ce <a href="https://www.python.org/downloads/" class="text-dark text-decoration-none">lien</a>. Assurer vous d'installer la version <a href="https://www.python.org/ftp/python/3.13.2/python-3.13.2-amd64.exe" class="text-dark text-decoration-none"> Python 3.13.2 </a> ou installer une version plus récente</li>
+                            <li> Pour Linux, utiliser le gestionnaire de paquets (apt, yum, etc.) pour installer Python. Avec linux , l'installation s'avère plus facile il vous suffit de taper la commande 
+                                suivante dans votre terminal : <code class="text-dark">sudo apt install python3</code> en étant sur Ubuntu/Debian ou <code class="text-dark">sudo yum install python3</code> en ulisant d'autres distributions linux tels que Cent OS ; Red Hat , etc .</li>
+                            </li>
+                            <li> Pour MacOS, utiliser Homebrew ou télécharger l'installeur depuis le site officiel. Assurer vous d'installer la version <a href="https://www.python.org/ftp/python/3.13.2/python-3.13.2-macos11.pkg" class="text-black text-decoration-none"> Python 3.13.2 </a> ou installer une version récente sur le <a href="https://www.python.org/downloads/macos/" class="text-dark text-decoration-none"> le site officiel</a></li>
+                        </ul>
+                    </li><br>
+                    <li class="text-start"> Installer  <strong>pip (Python package manager)</strong><br>
+                        Inclus automatiquement avec Python. Vérifiez avec : <code class="text-dark">pip --version</code></li><br>
+                    <li class="text-start"> Installer MySQL sur son système localement .
+                        <ul>
+                            <li> Pour les utilisateurs utilsant Windows rendez vous sur <a href="https://dev.mysql.com/downloads/mysql/" class="text-black text-decoration-none">le site de télechargement officiel </a> ou installer directement la version  <a href="https://downloads.mysql.com/archives/get/p/25/file/mysql-installer-community-8.0.28.0.msi" class="text-black text-decoration-none">mysql  Ver 8.0.28 for Win64 on x86_64 (MySQL Community Server - GPL) </a>. Lors de l'installation choissisez le mode par défaut et créer et notez le mot de passe pour l'utilisateur root . De plus assurez vous de mettre dans votre path (système d'environnemnent ) le shell de sql . Ouvrez ensuite votre invite de commandes et lancer SQL avec la commande <code class="text-black"> mysql -u root -p </code> et entrez votre mot de passe pour vous connecter .</li>
+                            <li> Pour les utilisateurs de Linux , ouvrez juste un terminal et tapez la commande <code class="text-black"> sudo apt install mysql-server mysql-client </code> après avoir exécuter la commande <code class="text-black"> sudo apt update</code> pour de quelconques mises à jour . Démarrez ensuite votre service MySQL avec la commande <code class="text-black"> sudo systemctl start mysql </code>. Sécurisez le avec <code class="text-black"> sudo mysql_secure_installation </code> et connectez vous avec la commande <code class="text-black"> sudo mysql -u root -p </code>. </li>
+                            <li> Pour les utilisateurs de MacOS , avec Homebrew ouvrez votre invite de commandes et tapez la commande <code class="text-black"> brew install mysql </code> . Lancer le avec la commande <code class="text-black">brew services start mysql</code>. Connectez vous au service MySQL en tapant la commande <code class="text-black"> mysql -u root</code></li>
+                        </ul>
+                    </li><br>
+                    <li class="text-start">
+                        Avoir installé Git pour cloner le dépôt du projet. <br>
+                        Pour l'installation de Git, vous pouvez suivre les instructions sur le site officiel de Git : <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git" class="text-dark text-decoration-none">Installation de Git</a> en installant le paquet  de votre système. <br>
+                    </li>
+                </ol>
+            </div>
+            <div class="col col-lg-12 col-md-6 border border-3 border-warning border-start-0 border-end-0 my-2 h5">
+                <p class="w-100 text-center alert alert-primary h4"> Clonage du projet </p>
+                <p> Pour clonez le projet ouvrez juste git installé plus haut et tapez la commande <br>
+                <code class="text-dark"> git clone https://github.com/lenurb-123/PIL1_2425_26.git </code>
+                </p>
+                <p> Tapez <code class="text-black"> cd PIL1_2425_26</code> pour accéder au repertoire du dossier</p>
+            </div>
+            <div class="col col-lg-12 col-md-6 border border-3 border-success border-start-0 border-end-0 my-2 h5">
+                <p class="w-100 text-center alert alert-primary h4"> Création de l'environnement virtuel </p>
+                <p> Pour créer l'environnement virtuel , assurez-vous d'être dans le répertoire du projet cloné et exécutez la commande suivante : <br>
+                    <code class="text-dark"> python -m venv venv</code></p>
+            </div>
+            <div class="col col-lg-12 col-md-6 border border-3 border-info border-start-0 border-end-0 my-2 h5">
+                <p class="w-100 text-center alert alert-primary h4"> Activation de l'environnement virtuel </p>
+                <p> Pour activer l'environnement virtuel, utilisez la commande suivante : <br>
+                    <code class="text-dark"> source venv/bin/activate</code> (Linux/Mac) ou <code class="text-dark"> venv\Scripts\activate</code> (Windows). <br>
+                    Une fois l'environnement virtuel activé, vous verrez le nom de l'environnement virtuel dans votre invite de commande, indiquant que vous travaillez dans cet environnement isolé. <br>
+                    L'activation de l'environnement virtuel est essentielle pour s'assurer que les dépendances du projet sont installées et utilisées correctement, sans interférer avec d'autres projets Python sur votre système. <br>
+                    Vous pouvez désactiver l'environnement virtuel en exécutant la commande <code class="text-dark"> deactivate</code>. Cela vous ramènera à votre environnement Python global. <br>
+                    Assurez-vous d'activer l'environnement virtuel chaque fois que vous travaillez sur le projet pour garantir que les dépendances sont correctement gérées
+            </div>
+            <div class="col col-lg-12 col-md-6 border border-3 border-danger border-start-0 border-end-0 my-2">
+                <p class="w-100 text-center alert alert-primary h4"> Installation des dépendances </p>
+                <p class="h5"> Pour installer les dépendances du projet, assurez-vous d'être dans le répertoire du projet cloné et de l'environnement virtuel activé. Ensuite, exécutez la commande suivante : <br>
+                    <code class="text-dark"> pip install -r requirements.txt</code></p>
+                <p class="h5"> Cette commande installera toutes les bibliothèques nécessaires au bon fonctionnement du projet. <br>
+                    Assurez-vous que l'environnement virtuel est activé avant d'exécuter cette commande. Pour activer l'environnement virtuel, utilisez la commande suivante : <br>
+                    <code class="text-dark"> source venv/bin/activate</code> (Linux/Mac) ou <code class="text-dark"> venv\Scripts\activate</code> (Windows). <br>
+                    Une fois l'environnement virtuel activé, vous pouvez exécuter la commande d'installation des dépendances.</p>   
+            </div>
+            <div class="col col-lg-12 col-md-6 border border-3 border-white border-start-0 border-end-0 my-2">
+                <p class="w-100 text-center alert alert-primary h4"> Import de la base de données </p>
+                <p class="h5"> Pour importer la base de données, vous avez deux méthodes : </p>
+                <div class="container text-center border border-2 border-black my-2 h5">
+                    <b> Methode 1 : Via le Terminal SQL avec le fichier structure.sql </b>
+                    <ul class="list-unstyled">
+                        <li>Ouvrez un l'invite de commandes et connectez-vous à MySQL :</li>
+                        <li>
+                            <code class="text-black">mysql -u root -p</code>
+                        </li>
+                        <li>Créez la base de données :</li>
+                        <li>
+                            <code class="text-black">CREATE DATABASE ifri_comotorage;</code>
+                        </li>
+                        <li>Assurez-vous d'être dans le répertoire du projet dans votre terminal (invite de commandes). C'est-à-dire dans votre projet cloné. <br>
+                        Une fois dans le répertoire du projet, exécutez la commande suivante pour importer la structure de la base de données :</li>
+                        </li>
+                        <li>
+                            <code class="text-black">mysql -u root -p ifri_comotorage < db/structure.sql</code>
+                        </li>
+                        <p>Extrait de settings.py :</p>
+                        <pre><code>DATABASES = {
+                          'default': {
+                            'ENGINE': 'django.db.backends.mysql',
+                            'NAME': 'ifri_comotorage',
+                            'USER': 'root',
+                            'PASSWORD': 'votre_mot_de_passe',  # Si vous avez un mot de passe
+                            'HOST': 'localhost',
+                            'PORT': '3306',
+                          }
+                        }</code></pre>
+                    </ul>
+                </div>
+                <div class="container text-center border border-2 border-black my-2 h5">
+                    <b> Méthode 2 : Via MySQL Workbench :</b>
+                    <ul class="list-unstyled ">
+                        <li>Ouvrez MySQL Workbench et connectez-vous à votre serveur MySQL.</li>
+                        <li>Créez une nouvelle base de données nommée <b>ifri_comotorage</b>.</li>
+                        </li>      <p>Extrait de settings.py :</p>
+                            <pre><code>DATABASES = {
+                              'default': {
+                                'ENGINE': 'django.db.backends.mysql',
+                                'NAME': 'ifri_comotorage',
+                                'USER': 'root',
+                                'PASSWORD': 'votre_mot_de_passe',  # Si vous avez un mot de passe
+                                'HOST': 'localhost',
+                                'PORT': '3306',
+                              }
+                            }</code></pre>
+                        <li>
+                        <li>
+                            <p>Puis exécuter :</p>
+                            <pre><code class="text-black">python manage.py migrate</code> pour exéuter les migrations</pre>
+                            <pre><code class="text-black"> python manage.py createsuperuser</code> pour la création d'un super utilsateur</pre>
+                        </li>
+                            
+                    </ul>
+                </div>
+            </div>
+            <div class="col col-lg-12 col-md-12 border border-3 border-primary border-start-0 border-end-0 my-2">
+                <p class="w-100 text-center alert alert-primary h4"> Lancement du projet </p>
+                <p class="h5"> Pour lancer le projet, assurez-vous d'être dans le répertoire du projet cloné et de l'environnement virtuel activé. Ensuite, exécutez la commande suivante : <br>
+                    <code class="text-dark"> python manage.py runserver</code></p>
+                <p class="h5"> Cette commande démarrera le serveur de développement Django. Vous devriez voir un message indiquant que le serveur est en cours d'exécution sur <code class="text-dark">http://127.0.1:8000/</code>. <br>
+                    Vous pouvez accéder à l'application en ouvrant un navigateur web et en naviguant vers cette adresse. <br>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-2 alert alert-dark text-center p-3" id="readme">
+        <h3 class="bg-success text-center text-light"> README.md</h3>
+        <p class="h5"> Le fichier README.md est un document essentiel pour tout projet, car il fournit des informations
+            cruciales sur le projet, son installation, son utilisation et sa contribution. Il sert de guide pour les
+            utilisateurs et les développeurs, facilitant la compréhension et l'engagement avec le projet. </p>
+        <p class="h5"> Le fichier README.md du projet IFRI_comotorage est disponible dans le dépôt GitHub du projet. Il
+            contient des instructions détaillées sur la façon de configurer l'environnement de développement,
+            d'installer les dépendances nécessaires, de lancer l'application et de contribuer au projet. </p>
+        <p class="h5"> Pour consulter le fichier README.md, veuillez visiter le dépôt GitHub du projet IFRI_comotorage à
+            l'adresse suivante : <a href="https://github.com/lenurb-123/PIL1_2425_26.git" class="nav-link">https://github.com/lenurb-123/PIL1_2425_26.git</a>  
+
+    </div>
+    <footer class="bg-dark text-light text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-1">&copy; 2025 IFRI_Comotorage - Tous droits réservés</p>
+            <p class="mb-0">Réalisé par Brunel KPOGBEME avec ❤️ | Testeur du projet PIL1_2425_26</p>
+            <p class="mb-0 small">Version du projet : 1.0 | Dernière mise à jour : Juin 2025</p>
+        </div>
+    </footer>
+
+<script>
+    // Script pour ouvrir/fermer tous les tiroirs
+    const toggleAllBtn = document.getElementById('toggleAll');
+    let allOpen = false;
+
+    toggleAllBtn.addEventListener('click', function () {
+        const collapses = document.querySelectorAll('.collapse-root');
+        collapses.forEach(function (collapse) {
+            const bsCollapse = bootstrap.Collapse.getOrCreateInstance(collapse);
+            if (!allOpen) {
+                bsCollapse.show();
+            } else {
+                bsCollapse.hide();
+            }
+        });
+        allOpen = !allOpen;
+        toggleAllBtn.textContent = allOpen ? "Fermer l'arborescence du projet" : "Ouvrir l'arborescence du projet";
+    });
+</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+</body>
+</html>
