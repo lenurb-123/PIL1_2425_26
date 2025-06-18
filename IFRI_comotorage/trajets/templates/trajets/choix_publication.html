@@ -1,0 +1,95 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Choisir le type de publication{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-lg mt-5" style="background: var(--background-color); border: 1px solid var(--border-color);">
+                <div class="card-header text-center" style="background: var(--primary-color); color: #fff; border-radius: 8px 8px 0 0;">
+                    <h3 class="mb-0" style="font-weight: 700; letter-spacing: -1px;">Publier un trajet</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Option Conducteur -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-0" style="background: var(--background-color); box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border-color);">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-car fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                    <h4 class="card-title" style="color: var(--primary-color); font-weight: 600;">Je suis conducteur</h4>
+                                    <p class="card-text" style="color: var(--accent-color);">Je propose un trajet et je peux prendre des passagers.</p>
+                                    <a href="{% url 'publier_conducteur' %}" class="btn btn-block" style="background: var(--primary-color); color: #fff; border-radius: 6px; font-weight: 500; transition: background 0.2s;">Publier un trajet</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Option Passager -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 border-0" style="background: var(--background-color); box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid var(--border-color);">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user fa-3x mb-3" style="color: var(--secondary-color);"></i>
+                                    <h4 class="card-title" style="color: var(--secondary-color); font-weight: 600;">Je suis passager</h4>
+                                    <p class="card-text" style="color: var(--accent-color);">Je cherche un trajet pour me déplacer.</p>
+                                    <a href="{% url 'publier_passager' %}" class="btn btn-block" style="background: var(--secondary-color); color: #fff; border-radius: 6px; font-weight: 500; transition: background 0.2s;">Chercher un trajet</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #333333;
+        --accent-color: #666666;
+        --background-color: #ffffff;
+        --text-color: #000000;
+        --border-color: #e0e0e0;
+    }
+
+.card {
+    transition: transform 0.3s cubic-bezier(.4,2,.6,1);
+    border-radius: 8px;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+}
+
+.btn-block {
+    width: 100%;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+.btn-block:hover {
+    filter: brightness(0.85);
+}
+
+.fas {
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    margin-bottom: 1rem;
+}
+
+.card-text {
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 767px) {
+    .card-header h3 { font-size: 1.3rem; }
+    .card-title { font-size: 1.1rem; }
+}
+</style>
+{% endblock %} 

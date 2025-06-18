@@ -1,0 +1,135 @@
+{% load static %}
+{% load humanize %}
+{% load widget_tweaks %}
+{% load i18n %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/conversation.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header d-flex justify-between align-items-center">
+        <h2>{{ utilisateur_cible.prenom }} {{ utilisateur_cible.nom }}</h2>
+        <span class="user-status text-success">🟢 En ligne</span>
+    </div>
+
+    <div class="chat-messages" id="message-container">
+        {% for message in messages %}
+        <div class="message {% if message.expediteur == request.user %}sent{% else %}received{% endif %}">
+            <p class="message-content">{{ message.contenu }}</p>
+            <div class="meta">
+                <small>{{ message.date_envoie|naturaltime }}</small>
+                {% if message.expediteur == request.user %}
+                    <small class="message-status">✓ Vu</small>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p id="typing-status" class="typing-status text-muted" style="margin: 5px 10px; font-size: 0.9em;"></p>
+
+    <form class="chat-form" action="." method="post">
+        {% csrf_token %}
+        <textarea name="contenu" id="message-input" rows="2" placeholder="Écrire un message..." autocomplete="off"></textarea>
+        <button type="submit"><i class="bi bi-send-fill"></i></button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const messageInput = document.getElementById('message-input');
+    const messageContainer = document.getElementById('message-container');
+    const form = document.querySelector('.chat-form');
+    const typingStatus = document.getElementById('typing-status');
+
+    const currentUserId = "{{ request.user.id }}";
+    const destinataireId = "{{ utilisateur_cible.id }}";
+
+    // Préparer WebSocket sécurisé
+    const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+    const chatSocket = new WebSocket(protocol + window.location.host + '/ws/chat/' + destinataireId + '/');
+
+    let typingTimeout;
+
+    chatSocket.onopen = function () {
+        console.log('WebSocket connecté');
+    };
+
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+
+        if (data.type === "message") {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', data.sender_id == currentUserId ? 'sent' : 'received');
+            msgDiv.innerHTML = `
+                <p class="message-content">${data.message}</p>
+                <div class="meta"><small>maintenant</small></div>
+            `;
+            messageContainer.appendChild(msgDiv);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+
+            // Notification navigateur
+            if (document.hidden && data.sender_id != currentUserId) {
+                if (Notification.permission === "granted") {
+                    new Notification("Nouveau message", {
+                        body: data.message,
+                        icon: "{% static 'icons/chat.png' %}"  // optionnel
+                    });
+                }
+            }
+        }
+
+        if (data.type === "typing") {
+            typingStatus.textContent = data.sender_id != currentUserId ? "Écrit un message..." : "";
+            clearTimeout(typingTimeout);
+            typingTimeout = setTimeout(() => typingStatus.textContent = "", 3000);
+        }
+
+        if (data.type === "seen" && data.seen_by == destinataireId) {
+            const allStatus = document.querySelectorAll('.sent .message-status');
+            allStatus.forEach(el => el.textContent = '✓ Vu');
+        }
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('WebSocket fermé.', e);
+    };
+
+    chatSocket.onerror = function (e) {
+        console.error('Erreur WebSocket :', e);
+    };
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message.length > 0) {
+            chatSocket.send(JSON.stringify({ type: "message", message: message }));
+            messageInput.value = '';
+        }
+    });
+
+    messageInput.addEventListener('input', function () {
+        chatSocket.send(JSON.stringify({ type: "typing" }));
+    });
+
+    messageInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            form.requestSubmit();
+        }
+    });
+
+    // Scroll initial
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+
+    // Demande permission pour notifications
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+});
+</script>
+{% endblock %}
