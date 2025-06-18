@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Détails du trajet</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Informations sur le trajet</h4>
+                    <p><strong>De :</strong> {{ trajet.lieu_depart }}</p>
+                    <p><strong>À :</strong> {{ trajet.lieu_arrivee }}</p>
+                    <p><strong>Date :</strong> {{ trajet.date|date:"l j F Y" }}</p>
+                    <p><strong>Heure :</strong> {{ trajet.heure_depart|time:"H:i" }}</p>
+                    {% if trajet.conducteur %}
+                        <p><strong>Conducteur :</strong> {{ trajet.conducteur.get_full_name }}</p>
+                        <p><strong>Places disponibles :</strong> {{ trajet.places_disponibles }}</p>
+                    {% else %}
+                        <p><strong>Passager :</strong> {{ trajet.passager.get_full_name }}</p>
+                    {% endif %}
+                    <p><strong>Tarif :</strong> {{ trajet.tarif }} FCFA</p>
+                </div>
+                
+                <div class="col-md-4">
+                    {% if user != trajet.conducteur and trajet.conducteur and trajet.statut == 'proposé' %}
+                        {% if not reservation %}
+                            <form action="{% url 'reserver_trajet' trajet.id %}" method="post" class="mb-3">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Réserver ce trajet
+                                </button>
+                            </form>
+                        {% else %}
+                            <div class="alert alert-info">
+                                Statut de votre réservation : {{ reservation.get_statut_display }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if user == trajet.conducteur or user == trajet.passager %}
+                        <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#modalAnnulation">
+                            Annuler ce trajet
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user == trajet.conducteur and trajet.reservations.exists %}
+                <div class="mt-4">
+                    <h4>Réservations</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Passager</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in trajet.reservations.all %}
+                                    <tr>
+                                        <td>{{ reservation.passager.get_full_name }}</td>
+                                        <td>{{ reservation.get_statut_display }}</td>
+                                        <td>
+                                            {% if reservation.statut == 'en_attente' %}
+                                                <form action="{% url 'gerer_reservation' reservation.id %}" method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="accepter">
+                                                    <button type="submit" class="btn btn-success btn-sm">Accepter</button>
+                                                </form>
+                                                <form action="{% url 'gerer_reservation' reservation.id %}" method="post" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="action" value="refuser">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Refuser</button>
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'annulation -->
+<div class="modal fade" id="modalAnnulation" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Annuler le trajet</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'annuler_trajet' trajet.id %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="raison">Raison de l'annulation :</label>
+                        <textarea name="raison" id="raison" class="form-control" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Activer les tooltips Bootstrap
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+{% endblock %} 

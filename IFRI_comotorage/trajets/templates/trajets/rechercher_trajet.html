@@ -1,10 +1,191 @@
 {% extends 'comptes/base.html' %}
+{% load static %}
 {% block content %}
-<div class="d-flex flex-column align-items-center justify-content-center" style="min-height:60vh;">
-    <h1 class="mb-4" style="font-weight:700;">Rechercher un trajet</h1>
-    <p class="mb-4 text-center" style="max-width:400px;">Trouvez rapidement un trajet ou accédez à vos publications et réservations.</p>
-    <a href="{% url 'mes_trajets' %}" class="btn btn-primary btn-lg" style="padding: 0.9rem 2.2rem; font-size:1.2rem; border-radius: 12px; font-weight:600;">
-        <i class="bi bi-map"></i> Mes trajets
-    </a>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="mb-4" style="font-weight:700;">Rechercher un trajet</h1>
+        <p class="mb-4 text-center" style="max-width:600px; margin:auto;">Trouvez rapidement un trajet ou accédez à vos publications et réservations.</p>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form method="get" class="row g-3">
+                        {{ form.non_field_errors }}
+                        <div class="col-md-5 position-relative">
+                            <label for="id_depart" class="form-label">Lieu de départ</label>
+                            {{ form.depart }}
+                        </div>
+                        <div class="col-md-5 position-relative">
+                            <label for="id_arrivee" class="form-label">Lieu d'arrivée</label>
+                            {{ form.arrivee }}
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100" style="padding: 0.6rem">
+                                <i class="bi bi-search"></i> Rechercher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if trajets_conducteurs %}
+        <div class="matching-container">
+            <div class="matching-list">
+                <h2>🚗 Trajets disponibles</h2>
+                {% for trajet in trajets_conducteurs %}
+                    <div class="trajet-item" data-adresse="{{ trajet.lieu_depart }}" data-adresse2="{{ trajet.lieu_arrivee }}" data-index="{{ forloop.counter0 }}">
+                        <div class="trajet-nom">{{ trajet.conducteur.prenom }} {{ trajet.conducteur.nom }}</div>
+                        <div class="trajet-info">Départ : {{ trajet.lieu_depart }}</div>
+                        <div class="trajet-info">Arrivée : {{ trajet.lieu_arrivee }}</div>
+                        <div class="trajet-info">Heure : {{ trajet.heure_depart }} | Places : {{ trajet.places_disponibles }}</div>
+                        <div class="trajet-score">Score : {{ scores|default_if_none:""|slice:forloop.counter0|stringformat:"d" }}%</div>
+                        <a href="{% url 'reserver_trajet' trajet.id %}" class="btn btn-sm btn-primary mt-2">
+                            <i class="bi bi-calendar-check"></i> Réserver
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+            <div id="map-matching"></div>
+        </div>
+    {% elif form.is_bound %}
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle"></i> Aucun trajet ne correspond à votre recherche.
+        </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'mes_trajets' %}" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-map"></i> Voir mes trajets
+        </a>
+    </div>
 </div>
+
+<style>
+    .matching-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+        align-items: flex-start;
+        margin: 30px auto;
+        max-width: 1200px;
+    }
+    .matching-list {
+        flex: 1 1 300px;
+        min-width: 280px;
+        max-width: 350px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        padding: 20px 15px;
+        height: 420px;
+        overflow-y: auto;
+    }
+    .matching-list h2 {
+        font-size: 20px;
+        color: #2d3436;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    .trajet-item {
+        padding: 12px 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s;
+        border: 1px solid #e0e0e0;
+    }
+    .trajet-item:hover {
+        background: #e8f0fe;
+    }
+    .trajet-nom {
+        font-weight: bold;
+        color: #187bcd;
+    }
+    .trajet-info {
+        font-size: 13px;
+        color: #636e72;
+    }
+    .trajet-score {
+        font-size: 13px;
+        color: #27ae60;
+        font-weight: bold;
+    }
+    #map-matching {
+        flex: 2 1 350px;
+        min-width: 320px;
+        height: 420px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    @media (max-width: 900px) {
+        .matching-container { flex-direction: column; align-items: stretch; }
+        #map-matching { min-width: 0; width: 100%; height: 300px; margin-bottom: 20px; }
+        .matching-list { max-width: 100%; }
+    }
+    .form-control {
+        padding: 0.6rem;
+        border-radius: 8px;
+    }
+    /* Style pour les champs de formulaire */
+    #lieu_depart_autocomplete, #lieu_arrivee_autocomplete {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+    }
+</style>
+
+{% if trajets_conducteurs %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var map = L.map('map-matching').setView([6.4, 2.5], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+        var markers = [];
+        var items = document.querySelectorAll('.trajet-item');
+        
+        items.forEach(function(item, idx) {
+            var adresse = item.getAttribute('data-adresse');
+            var adresse2 = item.getAttribute('data-adresse2');
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(adresse))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        var lat = parseFloat(data[0].lat);
+                        var lng = parseFloat(data[0].lon);
+                        var marker = L.marker([lat, lng]).addTo(map);
+                        marker.bindPopup('<b>' + item.querySelector('.trajet-nom').textContent + '</b><br>Départ : ' + adresse + '<br>Arrivée : ' + adresse2);
+                        markers.push(marker);
+                        item.addEventListener('click', function() {
+                            map.setView([lat, lng], 14);
+                            marker.openPopup();
+                            items.forEach(i => i.style.background = '#f8f9fa');
+                            item.style.background = '#e8f0fe';
+                        });
+                    }
+                });
+        });
+
+        setTimeout(function() {
+            if (markers.length > 0) {
+                var group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.2));
+            }
+        }, 1200);
+    });
+</script>
+{% endif %}
+
+<!-- Chargement du script d'autocomplétion -->
+<script src="{% static 'js/autocomplete_adresse.js' %}"></script>
 {% endblock %}
