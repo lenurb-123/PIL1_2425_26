@@ -93,13 +93,13 @@ ___
 
 1. **Créer une base de données MySQL appelée `ifri_comotorage`**
 
-2. **Importer le fichier**
+2. **Importer le fichier dans l'invite de commandes shell de MySQL avec la commande **
 
     ```bash
     mysql -u root -p ifri_comotorage < db/structure.sql
     ```
 
-3. **Modifier le fichier `settings.py` :**
+3. **Modifier le fichier `settings.py`  de votre application principale IFRI_comotorage:**
 
     ```python
     DATABASES = {
@@ -134,7 +134,7 @@ ___
 
 - **Créer la base de données MySQL appelée `ifri_comotorage`**
 
-- **Modifier le fichier `settings.py` :**
+- **Modifier le fichier `settings.py`  de votre apllication IFRI_comotorage :**
 
     ```python
     DATABASES = {
@@ -158,7 +158,7 @@ ___
     cd IFRI_comotorage
 ```
 
-## :arrow_forward: Démarrer le projet 
+## :arrow_forward: Démarrer le projet:
 
 ```bash
 python manage.py makemigrations
@@ -182,7 +182,7 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 
 ---
 
-# :+1: Pour testet la messagerie , veillez ouvrir le lien dans différents navigateurs avec différents comptes pour vous envoyer des messages 
+# :+1: Pour tester la messagerie , veillez ouvrir le lien dans différents navigateurs avec différents comptes pour vous envoyer des messages 
 
 ---
 
