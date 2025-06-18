@@ -1,0 +1,114 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Accueil - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+.hero-section {
+    background: linear-gradient(120deg, #007bff 60%, #00bcd4 100%);
+    color: #fff;
+    padding: 60px 0 40px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero-section .hero-img {
+    max-width: 350px;
+    width: 100%;
+    margin: 30px auto 0 auto;
+    border-radius: 2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+.hero-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: 1px;
+}
+.hero-desc {
+    font-size: 1.3rem;
+    margin-bottom: 32px;
+    color: #e0f7fa;
+}
+.cta-btn {
+    background: #fff;
+    color: #007bff;
+    font-weight: 600;
+    border-radius: 30px;
+    padding: 14px 36px;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, color 0.2s;
+    border: none;
+}
+.cta-btn:hover {
+    background: #007bff;
+    color: #fff;
+}
+.features-section {
+    background: #f8f9fa;
+    padding: 40px 0 20px 0;
+}
+.feature {
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    margin-bottom: 24px;
+    transition: transform 0.2s;
+}
+.feature:hover {
+    transform: translateY(-4px) scale(1.03);
+}
+.feature-icon {
+    font-size: 2.5rem;
+    color: #00bcd4;
+    margin-bottom: 12px;
+}
+@media (max-width: 600px) {
+    .hero-title { font-size: 2rem; }
+    .hero-section { padding: 40px 0 20px 0; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">Bienvenue sur IFRI Comotorage</h1>
+        <p class="hero-desc">La plateforme moderne de covoiturage universitaire, inspirée des meilleurs standards (Telegram, Uber, WhatsApp).<br>Discutez, partagez, voyagez ensemble en toute sécurité !</p>
+        <a href="{% url 'connexion' %}" class="cta-btn">Commencer</a>
+        <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=800&q=80" alt="Covoiturage" class="hero-img">
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-12 mb-4">
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-chat-dots"></i></div>
+                    <h5>Messagerie instantanée</h5>
+                    <p>Discutez en temps réel avec vos covoitureurs, partagez des fichiers, photos et vidéos. Interface inspirée de Telegram.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-12 mb-4">
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-geo-alt"></i></div>
+                    <h5>Recherche & publication de trajets</h5>
+                    <p>Trouvez ou proposez un trajet facilement, avec autocomplétion d'adresse et carte interactive.</p>
+                </div>
+            </div>
+            <div class="col-md-4 col-12 mb-4">
+                <div class="feature">
+                    <div class="feature-icon"><i class="bi bi-people"></i></div>
+                    <h5>Groupes & sécurité</h5>
+                    <p>Créez des groupes, partagez en toute confiance grâce à la vérification des profils et la gestion des statuts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

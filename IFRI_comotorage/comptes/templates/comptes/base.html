@@ -1,0 +1,498 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IFRI Comotorage{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2AABEE;
+            --secondary-color: #229ED9;
+            --accent-color: #E53935;
+            --dark-color: #1E2B3C;
+            --light-color: #F5F6F8;
+            --text-color: #2C3E50;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --bg-dark: #181818;
+            --bg-light: #f8f9fa;
+            --text-light: #ffffff;
+            --text-dark: #000000;
+            --border-light: #e9ecef;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+       
+        body {
+            font-family: 'Poppins', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, rgb(255,255,255) 0%, rgb(255, 255, 255) 100%);
+            color: var(--text-dark);
+            margin: 0;  
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 70px; /* Hauteur de la navbar */
+        }
+
+        .navbar {
+            background: linear-gradient(120deg, rgb(112,113,115), rgb(112,113,115) 70%);
+            box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+            padding: 0.8rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 70px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover {
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            transition: var(--transition);
+            margin: 0 0.2rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: var(--text-light);
+            box-shadow: 0 4px 12px rgba(42, 171, 238, 0.3);
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .badge {
+            padding: 0.35em 0.65em;
+            font-size: 0.75em;
+            font-weight: 600;
+            background: var(--accent-color);
+            color: var(--text-light);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu .dropdown-menu {
+            border: none;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            padding: 0.5rem;
+            min-width: 200px;
+            background: var(--text-light);
+        }
+
+        .user-menu .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-dark);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .user-menu .dropdown-item:hover {
+            background: var(--bg-light);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .user-menu .dropdown-item i {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .user-menu .dropdown-divider {
+            margin: 0.5rem 0;
+            border-color: var(--border-light);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: 2px solid var(--text-light);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 0;
+            background: var(--bg-light);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 2.5rem 0 1.2rem 0;
+            margin-top: 3rem;
+            border-radius: 24px 24px 0 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .footer-text p {
+            margin: 0;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #232526;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .social-link:hover {
+            background: var(--primary-color);
+            color: var(--text-light);
+            transform: translateY(-3px) scale(1.08);
+        }
+
+        /* Styles pour les messages flash */
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .alert-success {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .alert-danger {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .alert-warning {
+            background: #FFF3E0;
+            color: #EF6C00;
+        }
+
+        .alert-info {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            background: transparent;
+            display: none;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Media queries pour la responsivité */
+        @media (max-width: 991.98px) {
+            .navbar-toggler {
+                display: block !important;
+            }
+            
+            .navbar-collapse {
+                background: var(--bg-dark);
+                padding: 1rem;
+                border-radius: 0 0 15px 15px;
+                box-shadow: var(--shadow);
+                margin-top: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                height: 60px;
+                padding: 0.5rem 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.2rem;
+            }
+            .footer-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'accueil' %}">
+                <i class="bi bi-car-front"></i> IFRI Comotorage
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'accueil' %}active{% endif %}" href="{% url 'accueil' %}">
+                            <i class="bi bi-house"></i>
+                            Accueil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'rechercher_trajet' %}active{% endif %}" href="{% url 'rechercher_trajet' %}">
+                            <i class="bi bi-search"></i>
+                            Rechercher
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'publier_trajet' %}active{% endif %}" href="{% url 'publier_trajet' %}">
+                            <i class="bi bi-plus-circle"></i>
+                            Publier
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'mes_trajets' %}active{% endif %}" href="{% url 'mes_trajets' %}">
+                            <i class="bi bi-map"></i>
+                            Mes trajets
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'liste_discussions' %}active{% endif %}" href="{% url 'liste_discussions' %}">
+                            <i class="bi bi-chat-square-text"></i>
+                            Discussions
+                            <span class="badge bg-danger rounded-pill">3</span>
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.is_authenticated %}
+                        <div class="user-menu">
+                            <button class="btn btn-link p-0" type="button" data-bs-toggle="dropdown">
+                                <div class="user-avatar">
+                                    {% if user.photo_profil %}
+                                        <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                    {% else %}
+                                        {{ user.get_initials }}
+                                    {% endif %}
+                                </div>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'profil' %}">
+                                        <i class="bi bi-person"></i>
+                                        Mon profil
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'parametres' %}">
+                                        <i class="bi bi-gear"></i>
+                                        Paramètres
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{% url 'deconnexion' %}">
+                                        <i class="bi bi-box-arrow-right"></i>
+                                        Déconnexion
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'connexion' %}" class="btn btn-outline-primary">Connexion</a>
+                        <a href="{% url 'inscription' %}" class="btn btn-primary">Inscription</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="{% url 'accueil' %}" class="footer-link">Accueil</a>
+                    <a href="{% url 'contact' %}" class="footer-link">Contact</a>
+                    <a href="{% url 'infos' %}" class="footer-link">À propos</a>
+                    <a href="#" class="footer-link">Mentions légales</a>
+                </div>
+              
+                <div class="footer-text">
+                    <p>&copy; 2025 IFRI Comotorage. Tous droits réservés.</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = new bootstrap.Modal(document.getElementById('flashModal'));
+            if (document.getElementById('flashModal') && document.querySelector('#flashModal .modal-body').textContent.trim() !== '') {
+                modal.show();
+            }
+        });
+    </script>
+    {% endblock %}
+
+    <!-- Modale pour messages flash Django -->
+    <div class="modal fade" id="flashModal" tabindex="-1" aria-labelledby="flashModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:#fff;color:#111;border-radius:16px;box-shadow:0 4px 32px rgba(0,0,0,0.12);">
+          <div class="modal-header" style="border-bottom:1.5px solid #eee;">
+            <h5 class="modal-title" id="flashModalLabel">Notification</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+          <div class="modal-body">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} mb-0" style="border-radius:8px;">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+</html>

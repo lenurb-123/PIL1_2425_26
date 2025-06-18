@@ -1,0 +1,324 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Contact - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #ffffff;
+        --border-color: #e0e0e0;
+        --text-color: #333333;
+        --hover-color: #333333;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .contact-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        opacity: 0;
+        transform: translateY(-20px);
+        animation: fadeInDown 0.6s ease forwards;
+    }
+
+    .contact-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .contact-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards 0.3s;
+    }
+
+    .contact-info {
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+    }
+
+    .info-section {
+        margin-bottom: 2rem;
+    }
+
+    .info-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .info-title i {
+        font-size: 1.5rem;
+    }
+
+    .info-content {
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+
+    .contact-form {
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--text-color);
+        transition: var(--transition);
+        background: var(--secondary-color);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+
+    .submit-btn {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        border-radius: 8px;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+        background: var(--hover-color);
+        transform: translateY(-2px);
+    }
+
+    .submit-btn i {
+        font-size: 1.2rem;
+    }
+
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .social-link:hover {
+        transform: translateY(-3px);
+        background: var(--hover-color);
+    }
+
+    .social-link i {
+        font-size: 1.2rem;
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .contact-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .contact-title {
+            font-size: 2rem;
+        }
+
+        .contact-info, .contact-form {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="contact-container">
+    <div class="contact-header">
+        <h1 class="contact-title">Contactez-nous</h1>
+        <p class="contact-subtitle">Nous sommes là pour vous aider. N'hésitez pas à nous contacter pour toute question ou assistance.</p>
+    </div>
+
+    <div class="contact-grid">
+        <div class="contact-info">
+            <div class="info-section">
+                <h2 class="info-title">
+                    <i class="bi bi-geo-alt"></i>
+                    Notre Adresse
+                </h2>
+                <p class="info-content">
+                    IFRI - Institut de Formation et de Recherche en Informatique<br>
+                    123 Avenue de l'Innovation<br>
+                    Abidjan, Côte d'Ivoire
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">
+                    <i class="bi bi-envelope"></i>
+                    Email
+                </h2>
+                <p class="info-content">
+                    <a href="mailto:contact@ifri-comotorage.com" style="color: var(--text-color); text-decoration: none;">
+                        contact@ifri-comotorage.com
+                    </a>
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">
+                    <i class="bi bi-telephone"></i>
+                    Téléphone
+                </h2>
+                <p class="info-content">
+                    <a href="tel:+2250123456789" style="color: var(--text-color); text-decoration: none;">
+                        +225 01 23 45 67 89
+                    </a>
+                </p>
+            </div>
+
+            <div class="info-section">
+                <h2 class="info-title">
+                    <i class="bi bi-clock"></i>
+                    Horaires d'ouverture
+                </h2>
+                <p class="info-content">
+                    Lundi - Vendredi: 8h00 - 18h00<br>
+                    Samedi: 9h00 - 13h00<br>
+                    Dimanche: Fermé
+                </p>
+            </div>
+
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <i class="bi bi-facebook"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="bi bi-twitter"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label" for="nom">Nom complet</label>
+                    <input type="text" class="form-control" id="nom" name="nom" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="sujet">Sujet</label>
+                    <input type="text" class="form-control" id="sujet" name="sujet" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="message">Message</label>
+                    <textarea class="form-control" id="message" name="message" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="bi bi-send"></i>
+                    Envoyer le message
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %} 

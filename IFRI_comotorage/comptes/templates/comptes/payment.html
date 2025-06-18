@@ -1,0 +1,385 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="h3 mb-0 text-center">Page de Paiement</h1>
+                </div>
+                <div class="card-body">
+                    <h3 class="text-center mb-4">Choisissez votre méthode de paiement</h3>
+                    
+                    <!-- Résumé du trajet -->
+                    <div class="trajet-summary mb-4">
+                        <div class="alert alert-info">
+                            <h5>Résumé du trajet</h5>
+                            <p class="mb-1"><strong>Départ :</strong> <span id="trajet-depart">{{ depart|default:"Non spécifié" }}</span></p>
+                            <p class="mb-1"><strong>Arrivée :</strong> <span id="trajet-arrivee">{{ arrivee|default:"Non spécifié" }}</span></p>
+                            <p class="mb-0"><strong>Tarif :</strong> <span id="trajet-tarif">{{ tarif|default:"0" }}</span> FCFA</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-methods">
+                        <div class="method active" data-method="card">
+                            <i class="fas fa-credit-card"></i><br>Carte de crédit
+                        </div>
+                        <div class="method" data-method="mtn">
+                            <img src="{% static 'images/mtn_logo.png' %}" alt="MTN Mobile Money"><br>MTN
+                        </div>
+                        <div class="method" data-method="moov">
+                            <img src="{% static 'images/logo_moov.png' %}" alt="Moov Money"><br>Moov
+                        </div>
+                        <div class="method" data-method="celtiis">
+                            <img src="{% static 'images/logo_celtiis.png' %}" alt="Celtiis Cash"><br>Celtiis
+                        </div>
+                    </div>
+
+                    <form id="form-card" class="payment-form active">
+                        <div class="nom_user">
+                            <label for="nom_user">Entrez votre nom</label>
+                            <input type="text" placeholder="Ulk Bam" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cardNumber">Numero de carte</label>
+                            <input type="text" placeholder="4111111111111111" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="expiryDate">Date d'expiration</label>
+                            <input type="text" placeholder="MM/YY" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv"><i class="fas fa-lock"></i> CVV</label>
+                            <input type="text" placeholder="123" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-credit-card"></i> Payer maintenant
+                        </button>
+                    </form>
+
+                    <form id="form-mtn" class="payment-form">
+                        <div class="form-group">
+                            <label for="mtnNumber">Numero MTN</label>
+                            <input type="text" placeholder="Ex: 0197345671" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mtnCode">Code MTN</label>
+                            <input type="text" placeholder="Ex: 12345" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block">
+                            <i class="fas fa-mobile-alt"></i> Payer maintenant
+                        </button>
+                    </form>
+
+                    <form id="form-moov" class="payment-form">
+                        <div class="form-group">
+                            <label for="moovNumber">Numero Moov</label>
+                            <input type="text" placeholder="Ex: 0195345671" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="moovCode">Code Moov</label>
+                            <input type="text" placeholder="Ex: 12345" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">
+                            <i class="fas fa-mobile-alt"></i> Payer maintenant
+                        </button>
+                    </form>
+
+                    <form id="form-celtiis" class="payment-form">
+                        <div class="form-group">
+                            <label for="celtiisNumber">Numero Celtiis</label>
+                            <input type="text" placeholder="Ex: 0144345671" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="celtiisCode">Code top secret</label>
+                            <input type="text" placeholder="Ex: 12345" required>
+                        </div>
+                        <button type="submit" class="btn btn-info btn-block">
+                            <i class="fas fa-mobile-alt"></i> Payer maintenant
+                        </button>
+                    </form>
+
+                    <div class="payment-info mt-4">
+                        <p class="text-center text-muted">
+                            <i class="fas fa-shield-alt"></i>
+                            En cliquant sur "Payer maintenant", vous acceptez le paiement et le montant sera déduit directement de votre compte.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .payment-methods {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        gap: 10px;
+    }
+    
+    .payment-methods .method {
+        flex: 1;
+        padding: 15px 10px;
+        cursor: pointer;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        text-align: center;
+        background: #f8f9fa;
+        transition: all 0.3s ease;
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+    
+    .payment-methods .method:hover {
+        background-color: #e3f2fd;
+        color:rgba(0, 123, 255, 0.91);
+        border-color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,123,255,0.2);
+    }
+    
+    .payment-methods .method.active {
+        background-color:rgba(0, 123, 255, 0.87);
+        color: white;
+        border-color:white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,123,255,0.3);
+    }
+    
+    .payment-methods .method i {
+        font-size: 1.5em;
+        margin-bottom: 5px;
+        display: block;
+    }
+    
+    .payment-methods .method img {
+        max-width: 40px;
+        max-height: 40px;
+        display: block;
+        margin: 0 auto 5px auto;
+        object-fit: contain;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .form-group input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #000000;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+    
+    .nom_user {
+        margin-bottom: 20px;
+    }
+    
+    .nom_user input {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: border-color 0.3s ease;
+        box-sizing: border-box;
+    }
+    
+    .nom_user input:focus {
+        outline: none;
+        border-color: black;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+    
+    .payment-form {
+        display: none;
+        animation: fadeIn 0.3s ease-in;
+    }
+    
+    .payment-form.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .btn-block {
+        padding: 12px;
+        font-size: 1.1em;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-block:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .trajet-summary {
+        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+        border-radius: 8px;
+        padding: 15px;
+    }
+    
+    .payment-info {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        border-left: 4px solid #28a745;
+    }
+</style>
+
+<script>
+// Récupération des paramètres de l'URL
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+// Mise à jour du résumé du trajet avec les paramètres de l'URL
+document.addEventListener('DOMContentLoaded', function() {
+    const depart = getUrlParameter('depart');
+    const arrivee = getUrlParameter('arrivee');
+    const tarif = getUrlParameter('tarif');
+    const type = getUrlParameter('type');
+    const trajetId = getUrlParameter('trajet_id');
+    
+    // Mise à jour du résumé du trajet
+    if (depart) document.getElementById('trajet-depart').textContent = depart;
+    if (arrivee) document.getElementById('trajet-arrivee').textContent = arrivee;
+    if (tarif) document.getElementById('trajet-tarif').textContent = tarif + ' FCFA';
+    
+    // Ajouter le type de trajet au résumé
+    if (type) {
+        const typeText = type === 'conducteur' ? 'Trajet conducteur' : 'Demande passager';
+        const summaryDiv = document.querySelector('.trajet-summary .alert');
+        const typeElement = document.createElement('p');
+        typeElement.className = 'mb-0';
+        typeElement.innerHTML = `<strong>Type :</strong> ${typeText}`;
+        summaryDiv.appendChild(typeElement);
+    }
+    
+    // Stocker les informations pour le traitement du paiement
+    window.trajetInfo = {
+        depart: depart,
+        arrivee: arrivee,
+        tarif: tarif,
+        type: type,
+        trajetId: trajetId
+    };
+});
+
+const methods = document.querySelectorAll('.payment-methods .method');
+const forms = {
+    card: document.getElementById('form-card'),
+    mtn: document.getElementById('form-mtn'),
+    moov: document.getElementById('form-moov'),
+    celtiis: document.getElementById('form-celtiis')
+};
+
+methods.forEach(method => {
+    method.addEventListener('click', function() {
+        // Retirer la classe active de tous les boutons
+        methods.forEach(m => m.classList.remove('active'));
+        // Ajouter la classe active au bouton cliqué
+        this.classList.add('active');
+        // Cacher tous les formulaires
+        Object.values(forms).forEach(f => f.classList.remove('active'));
+        // Afficher le formulaire correspondant
+        const selected = this.getAttribute('data-method');
+        forms[selected].classList.add('active');
+    });
+});
+
+// Gestion de la soumission des formulaires
+document.querySelectorAll('.payment-form').forEach(form => {
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        // Récupérer les données du formulaire
+        const formData = new FormData(this);
+        const method = this.id.replace('form-', '');
+        const trajetInfo = window.trajetInfo || {};
+        
+        // Simulation du traitement de paiement
+        const button = this.querySelector('button[type="submit"]');
+        const originalText = button.innerHTML;
+        
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Traitement...';
+        button.disabled = true;
+        
+        // Simuler le traitement du paiement
+        setTimeout(() => {
+            // Créer un message de succès personnalisé
+            const successMessage = `Paiement de ${trajetInfo.tarif} FCFA effectué avec succès via ${method.toUpperCase()} !`;
+            
+            // Afficher une notification de succès
+            if (typeof showNotification === 'function') {
+                showNotification('success', 'Paiement réussi', successMessage);
+            } else {
+                alert(successMessage);
+            }
+            
+            // Redirection vers la page des trajets après 3 secondes
+            setTimeout(() => {
+                window.location.href = "{% url 'mes_trajets' %}";
+            }, 3000);
+            
+        }, 2000);
+    });
+});
+
+// Fonction pour afficher les notifications (si elle n'existe pas déjà)
+if (typeof showNotification === 'undefined') {
+    function showNotification(type, title, message, duration = 5000) {
+        // Créer une notification simple
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+        notification.innerHTML = `
+            <strong>${title}</strong><br>
+            ${message}
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto-suppression
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, duration);
+    }
+}
+</script>
+{% endblock %} 

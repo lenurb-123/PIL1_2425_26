@@ -1,0 +1,335 @@
+{% extends 'comptes/base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Publications en temps réel</h2>
+    
+    <!-- Zone de notifications -->
+    <div id="notifications-container" class="position-fixed" style="top: 20px; right: 20px; z-index: 9999;"></div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0">Conducteurs</h3>
+                </div>
+                <div class="card-body">
+                    <ul id="conducteurs-list" class="list-unstyled"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h3 class="h5 mb-0">Passagers</h3>
+                </div>
+                <div class="card-body">
+                    <ul id="passagers-list" class="list-unstyled"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .trajet-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+    
+    .trajet-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    .trajet-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    
+    .trajet-route {
+        font-size: 1.1em;
+        color: #2c3e50;
+    }
+    
+    .trajet-details {
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    .badge-custom {
+        background-color: #e9ecef;
+        color: #495057;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+    }
+
+    /* Nouveau style pour les trajets des passagers */
+    .trajet-passager {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+    }
+
+    .trajet-passager .trajet-route {
+        font-weight: bold;
+        color: #856404;
+    }
+
+    .trajet-passager .badge-custom {
+        background-color: #ffeeba;
+        color: #856404;
+    }
+
+    /* Style pour le badge RÉSERVÉ */
+    .badge-reserve {
+        background-color: #dc3545 !important;
+        color: white !important;
+        font-weight: bold;
+        font-size: 0.8em;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    /* Styles pour les boutons */
+    .btn-reserver {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: bold;
+        transition: all 0.3s;
+        margin-top: 10px;
+    }
+
+    .btn-reserver:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        color: white;
+    }
+
+    /* Styles pour les notifications */
+    .notification {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        padding: 15px 20px;
+        margin-bottom: 10px;
+        border-left: 4px solid;
+        max-width: 350px;
+        animation: slideInRight 0.3s ease-out;
+        position: relative;
+    }
+
+    .notification.success {
+        border-left-color: #28a745;
+        background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    }
+
+    .notification.error {
+        border-left-color: #dc3545;
+        background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    }
+
+    .notification.info {
+        border-left-color: #17a2b8;
+        background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+    }
+
+    .notification.warning {
+        border-left-color: #ffc107;
+        background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    }
+
+    .notification-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 1.1em;
+    }
+
+    .notification-message {
+        font-size: 0.9em;
+        color: #495057;
+    }
+
+    .notification-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+        color: #6c757d;
+    }
+
+    .notification-close:hover {
+        color: #343a40;
+    }
+
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+</style>
+
+<script>
+// Fonction pour afficher les notifications
+function showNotification(type, title, message, duration = 5000) {
+    const container = document.getElementById('notifications-container');
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    notification.innerHTML = `
+        <button class="notification-close" onclick="this.parentElement.remove()">&times;</button>
+        <div class="notification-title">${title}</div>
+        <div class="notification-message">${message}</div>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Auto-suppression après la durée spécifiée
+    if (duration > 0) {
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }
+        }, duration);
+    }
+}
+
+function rafraichirTrajets() {
+    fetch("{% url 'trajets_en_temps_reel' %}")
+        .then(response => response.json())
+        .then(data => {
+            let conducteurs = data.conducteurs.map(t =>
+                `<li class="trajet-card">
+                    <div class="trajet-info">
+                        <div class="trajet-route">
+                            <i class="fas fa-map-marker-alt text-danger"></i> ${t.lieu_depart} 
+                            <i class="fas fa-arrow-right mx-2 text-muted"></i>
+                            <i class="fas fa-map-marker-alt text-success"></i> ${t.lieu_arrivee}
+                        </div>
+                    </div>
+                    <div class="trajet-details">
+                        <span class="badge-custom">
+                            <i class="far fa-clock"></i> ${t.heure_depart ? t.heure_depart : 'Non spécifié'}
+                        </span>
+                        <span class="badge-custom">
+                            <i class="fas fa-chair"></i> ${t.places_disponibles ? t.places_disponibles + ' places' : 'Non spécifié'}
+                        </span>
+                        <span class="badge-custom">
+                            <i class="fas fa-money-bill-wave"></i> ${t.tarif_calcule} FCFA
+                        </span>
+                        <span class="badge-custom">
+                            <i class="fas fa-road"></i> ${t.distance_km} km
+                        </span>
+                    </div>
+                    <button class="btn btn-reserver w-100" onclick="reserverTrajetConducteur(${t.id}, '${t.lieu_depart}', '${t.lieu_arrivee}', ${t.tarif_calcule})">
+                        <i class="fas fa-car"></i> Réserver ce trajet
+                    </button>
+                </li>`
+            ).join('');
+            
+            let passagers = data.passagers.map(t =>
+                `<li class="trajet-card trajet-passager">
+                    <div class="trajet-info">
+                        <div class="trajet-route">
+                            <i class="fas fa-map-marker-alt text-danger"></i> ${t.lieu_depart}
+                            <i class="fas fa-arrow-right mx-2 text-muted"></i>
+                            <i class="fas fa-map-marker-alt text-success"></i> ${t.lieu_arrivee}
+                            <span class="badge-reserve ml-2">RÉSERVÉ</span>
+                        </div>
+                    </div>
+                    <div class="trajet-details">
+                        <span class="badge-custom">
+                            <i class="far fa-clock"></i> ${t.heure_souhaitee ? t.heure_souhaitee : 'Non spécifié'}
+                        </span>
+                        <span class="badge-custom">
+                            <i class="fas fa-money-bill-wave"></i> ${t.tarif_calcule} FCFA
+                        </span>
+                        <span class="badge-custom">
+                            <i class="fas fa-road"></i> ${t.distance_km} km
+                        </span>
+                    </div>
+                    <button class="btn btn-reserver w-100" onclick="repondreDemandePassager(${t.id}, '${t.lieu_depart}', '${t.lieu_arrivee}', ${t.tarif_calcule})">
+                        <i class="fas fa-user-plus"></i> Répondre à cette demande
+                    </button>
+                </li>`
+            ).join('');
+            
+            document.getElementById('conducteurs-list').innerHTML = conducteurs;
+            document.getElementById('passagers-list').innerHTML = passagers;
+        });
+}
+
+// Fonction pour réserver un trajet conducteur
+function reserverTrajetConducteur(trajetId, depart, arrivee, tarif) {
+    showNotification('info', 'Redirection...', 'Redirection vers la page de paiement...', 2000);
+    
+    // Redirection vers la page de paiement avec les paramètres du trajet
+    setTimeout(() => {
+        window.location.href = `{% url 'payment' %}?depart=${encodeURIComponent(depart)}&arrivee=${encodeURIComponent(arrivee)}&tarif=${tarif}&type=conducteur&trajet_id=${trajetId}`;
+    }, 2000);
+}
+
+// Fonction pour répondre à une demande de passager
+function repondreDemandePassager(trajetId, depart, arrivee, tarif) {
+    showNotification('info', 'Redirection...', 'Redirection vers la page de paiement...', 2000);
+    
+    // Redirection vers la page de paiement avec les paramètres du trajet
+    setTimeout(() => {
+        window.location.href = `{% url 'payment' %}?depart=${encodeURIComponent(depart)}&arrivee=${encodeURIComponent(arrivee)}&tarif=${tarif}&type=passager&trajet_id=${trajetId}`;
+    }, 2000);
+}
+
+// Rafraîchit toutes les 5 secondes
+setInterval(rafraichirTrajets, 5000);
+rafraichirTrajets();
+</script>
+{% endblock %}

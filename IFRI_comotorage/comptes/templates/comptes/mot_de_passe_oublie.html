@@ -1,0 +1,221 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Mot de passe oublié - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #ffffff;
+        --border-color: #e0e0e0;
+        --text-color: #333333;
+        --hover-color: #333333;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .password-reset-container {
+        max-width: 500px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .password-reset-card {
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2.5rem;
+        text-align: center;
+    }
+
+    .reset-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 2rem;
+    }
+
+    .reset-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .reset-description {
+        color: var(--text-color);
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        font-size: 1.1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        text-align: left;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--text-color);
+        transition: var(--transition);
+        background: var(--secondary-color);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .submit-btn {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        border-radius: 8px;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+        background: var(--hover-color);
+        transform: translateY(-2px);
+    }
+
+    .back-to-login {
+        margin-top: 1.5rem;
+        color: var(--text-color);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+    }
+
+    .back-to-login:hover {
+        color: var(--primary-color);
+    }
+
+    .back-to-login i {
+        font-size: 1.2rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-success {
+        background: #f0f9f0;
+        border: 1px solid #d4edda;
+        color: #155724;
+    }
+
+    .alert-error {
+        background: #fdf2f2;
+        border: 1px solid #f8d7da;
+        color: #721c24;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .password-reset-container {
+            margin: 2rem auto;
+        }
+
+        .password-reset-card {
+            padding: 1.5rem;
+        }
+
+        .reset-title {
+            font-size: 1.5rem;
+        }
+
+        .reset-description {
+            font-size: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="password-reset-container">
+    <div class="password-reset-card">
+        <div class="reset-icon">
+            <i class="bi bi-lock"></i>
+        </div>
+
+        <h1 class="reset-title">Mot de passe oublié ?</h1>
+        <p class="reset-description">
+            Entrez votre adresse e-mail ci-dessous et nous vous enverrons un lien pour réinitialiser votre mot de passe.
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label" for="email">Adresse e-mail</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="bi bi-send"></i>
+                Envoyer le lien de réinitialisation
+            </button>
+        </form>
+
+        <a href="{% url 'login' %}" class="back-to-login">
+            <i class="bi bi-arrow-left"></i>
+            Retour à la connexion
+        </a>
+    </div>
+</div>
+{% endblock %} 

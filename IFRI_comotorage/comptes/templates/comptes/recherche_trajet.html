@@ -1,0 +1,389 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Recherche de Trajet - IFRI CoMoTorage{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-form">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <select class="form-control" name="depart" required>
+                    <option value="">Départ</option>
+                    <optgroup label="Littoral">
+                        <option value="Cotonou" {% if request.GET.depart == 'Cotonou' %}selected{% endif %}>Cotonou</option>
+                    </optgroup>
+                    <optgroup label="Ouémé">
+                        <option value="Porto-Novo" {% if request.GET.depart == 'Porto-Novo' %}selected{% endif %}>Porto-Novo</option>
+                        <option value="Adjara" {% if request.GET.depart == 'Adjara' %}selected{% endif %}>Adjara</option>
+                        <option value="Avrankou" {% if request.GET.depart == 'Avrankou' %}selected{% endif %}>Avrankou</option>
+                        <option value="Dangbo" {% if request.GET.depart == 'Dangbo' %}selected{% endif %}>Dangbo</option>
+                        <option value="Sèmè-Kpodji" {% if request.GET.depart == 'Sèmè-Kpodji' %}selected{% endif %}>Sèmè-Kpodji</option>
+                    </optgroup>
+                    <optgroup label="Atlantique">
+                        <option value="Ouidah" {% if request.GET.depart == 'Ouidah' %}selected{% endif %}>Ouidah</option>
+                        <option value="Allada" {% if request.GET.depart == 'Allada' %}selected{% endif %}>Allada</option>
+                        <option value="Abomey-Calavi" {% if request.GET.depart == 'Abomey-Calavi' %}selected{% endif %}>Abomey-Calavi</option>
+                        <option value="Toffo" {% if request.GET.depart == 'Toffo' %}selected{% endif %}>Toffo</option>
+                        <option value="Zè" {% if request.GET.depart == 'Zè' %}selected{% endif %}>Zè</option>
+                        <option value="So-Ava" {% if request.GET.depart == 'So-Ava' %}selected{% endif %}>So-Ava</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" name="arrivee" required>
+                    <option value="">Arrivée</option>
+                   <optgroup label="Littoral">
+                        <option value="Cotonou" {% if request.GET.depart == 'Cotonou' %}selected{% endif %}>Cotonou</option>
+                    </optgroup>
+                    <optgroup label="Ouémé">
+                        <option value="Porto-Novo" {% if request.GET.depart == 'Porto-Novo' %}selected{% endif %}>Porto-Novo</option>
+                        <option value="Adjara" {% if request.GET.depart == 'Adjara' %}selected{% endif %}>Adjara</option>
+                        <option value="Avrankou" {% if request.GET.depart == 'Avrankou' %}selected{% endif %}>Avrankou</option>
+                        <option value="Dangbo" {% if request.GET.depart == 'Dangbo' %}selected{% endif %}>Dangbo</option>
+                        <option value="Sèmè-Kpodji" {% if request.GET.depart == 'Sèmè-Kpodji' %}selected{% endif %}>Sèmè-Kpodji</option>
+                    </optgroup>
+                    <optgroup label="Atlantique">
+                        <option value="Ouidah" {% if request.GET.depart == 'Ouidah' %}selected{% endif %}>Ouidah</option>
+                        <option value="Allada" {% if request.GET.depart == 'Allada' %}selected{% endif %}>Allada</option>
+                        <option value="Abomey-Calavi" {% if request.GET.depart == 'Abomey-Calavi' %}selected{% endif %}>Abomey-Calavi</option>
+                        <option value="Toffo" {% if request.GET.depart == 'Toffo' %}selected{% endif %}>Toffo</option>
+                        <option value="Zè" {% if request.GET.depart == 'Zè' %}selected{% endif %}>Zè</option>
+                        <option value="So-Ava" {% if request.GET.depart == 'So-Ava' %}selected{% endif %}>So-Ava</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Rechercher
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="results-container">
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+        
+        <div class="trajets-list">
+            {% if trajets %}
+                {% for trajet in trajets %}
+                <div class="trajet-card">
+                    <div class="trajet-header">
+                        <div class="conducteur-info">
+                            {% if trajet.conducteur.profile.photo %}
+                                <img src="{{ trajet.conducteur.profile.photo.url }}" alt="{{ trajet.conducteur.username }}" class="conducteur-photo">
+                            {% else %}
+                                <div class="conducteur-photo-placeholder">
+                                    {{ trajet.conducteur.username|first|upper }}
+                                </div>
+                            {% endif %}
+                            <div class="conducteur-details">
+                                <h4>{{ trajet.conducteur.username }}</h4>
+                                <div class="rating">
+                                    {% for i in "12345" %}
+                                        <i class="bi bi-star{% if forloop.counter <= trajet.conducteur.profile.rating %}fill{% endif %}"></i>
+                                    {% endfor %}
+                                    <span>({{ trajet.conducteur.profile.nombre_avis }})</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="trajet-prix">
+                            {{ trajet.prix }} FCFA
+                        </div>
+                    </div>
+                    
+                    <div class="trajet-details">
+                        <div class="trajet-route">
+                            <div class="route-point depart">
+                                <i class="bi bi-circle-fill"></i>
+                                <span>{{ trajet.depart }}</span>
+                            </div>
+                            <div class="route-line"></div>
+                            <div class="route-point arrivee">
+                                <i class="bi bi-circle-fill"></i>
+                                <span>{{ trajet.arrivee }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="trajet-info">
+                            <div class="info-item">
+                                <i class="bi bi-calendar"></i>
+                                <span>{{ trajet.date_depart|date:"d/m/Y" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-clock"></i>
+                                <span>{{ trajet.heure_depart|time:"H:i" }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-people"></i>
+                                <span>{{ trajet.places_disponibles }} places</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="trajet-actions">
+                        <a href="{% url 'reserver_trajet' trajet.id %}" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Réserver
+                        </a>
+                        <a href="{% url 'discussion' trajet.conducteur.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-chat"></i> Contacter
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-results">
+                    <i class="bi bi-search"></i>
+                    <h3>Aucun trajet trouvé</h3>
+                    <p>Essayez de modifier vos critères de recherche</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .search-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .search-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+
+    .results-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .map-container {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    #map {
+        height: 600px;
+        width: 100%;
+    }
+
+    .trajets-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+
+    .trajet-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .trajet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .conducteur-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .conducteur-photo,
+    .conducteur-photo-placeholder {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .conducteur-photo-placeholder {
+        background: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .conducteur-details h4 {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .rating {
+        color: #ffc107;
+        font-size: 14px;
+    }
+
+    .rating span {
+        color: #666;
+        margin-left: 5px;
+    }
+
+    .trajet-prix {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .trajet-details {
+        margin-bottom: 15px;
+    }
+
+    .trajet-route {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .route-point {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .route-point i {
+        color: var(--primary-color);
+        font-size: 12px;
+    }
+
+    .route-line {
+        width: 2px;
+        height: 20px;
+        background: #ddd;
+        margin-left: 5px;
+    }
+
+    .trajet-info {
+        display: flex;
+        gap: 20px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #666;
+    }
+
+    .trajet-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+    }
+
+    .no-results i {
+        font-size: 48px;
+        margin-bottom: 10px;
+    }
+
+    @media (max-width: 991.98px) {
+        .results-container {
+            grid-template-columns: 1fr;
+        }
+
+        #map {
+            height: 400px;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .search-container {
+            padding: 10px;
+        }
+
+        .trajet-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .trajet-prix {
+            align-self: flex-start;
+        }
+
+        .trajet-info {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .trajet-actions {
+            flex-direction: column;
+        }
+    }
+    </style>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Coordonnées de l'IFRI (à ajuster selon la position exacte)
+        const ifriLocation = [6.3456789, 2.3456789];
+        
+        // Initialisation de la carte
+        const map = L.map('map').setView(ifriLocation, 12);
+        
+        // Ajout du fond de carte OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Marqueur pour l'IFRI
+        L.marker(ifriLocation).addTo(map)
+            .bindPopup('Institut de Formation et de Recherche en Informatique (IFRI)')
+            .openPopup();
+        
+        // Ajout des trajets sur la carte
+        {% for trajet in trajets %}
+            // Coordonnées des villes (à remplacer par les vraies coordonnées)
+            const departCoords = [6.3456789, 2.3456789]; // Coordonnées de départ
+            const arriveeCoords = [6.3456789, 2.3456789]; // Coordonnées d'arrivée
+            
+            // Ligne du trajet
+            L.polyline([departCoords, arriveeCoords], {
+                color: 'var(--primary-color)',
+                weight: 3,
+                opacity: 0.7
+            }).addTo(map);
+            
+            // Marqueurs de départ et d'arrivée
+            L.marker(departCoords).addTo(map)
+                .bindPopup('Départ: {{ trajet.depart }}');
+            L.marker(arriveeCoords).addTo(map)
+                .bindPopup('Arrivée: {{ trajet.arrivee }}');
+        {% endfor %}
+        
+        // Ajustement de la vue pour montrer tous les trajets
+        map.fitBounds(L.latLngBounds(
+            {% for trajet in trajets %}
+                [6.3456789, 2.3456789],
+            {% endfor %}
+            [6.3456789, 2.3456789]
+        ));
+    });
+    </script>
+{% endblock %} 
