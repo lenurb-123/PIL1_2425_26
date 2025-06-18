@@ -115,6 +115,10 @@ ___
     ```
 
 4. **Données de connexion**
+   
+     - Compte superutilistateur
+        - Email : admin@gmail.com
+        -  Mot de passe : admin123 
 
      - Compte 1 : Compte passager 
         - Email : kpogbemebrunel@gmail.com
