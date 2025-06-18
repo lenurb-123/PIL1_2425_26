@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="discussions-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Mes discussions</h2>
+            <a href="{% url 'creer_groupe' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nouveau groupe
+            </a>
+        </div>
+
+        {% if discussions %}
+            <div class="discussion-list">
+                {% for discussion in discussions %}
+                    <div class="discussion-item">
+                        <a href="{% url 'conversation' discussion.id %}" class="discussion-link">
+                            {% if discussion.photo %}
+                                <img src="{{ discussion.photo.url }}" alt="Photo" class="avatar">
+                            {% else %}
+                                {% if discussion.type == 'privee' %}
+                                    <img src="{% static 'images/default-avatar.svg' %}" alt="Avatar" class="avatar">
+                                {% else %}
+                                    <img src="{% static 'images/default-group.svg' %}" alt="Groupe" class="avatar">
+                                {% endif %}
+                            {% endif %}
+
+                            <div class="discussion-info">
+                                <div class="discussion-title">
+                                    {% if discussion.type == 'privee' %}
+                                        {% for participant in discussion.participants.all %}
+                                            {% if participant != user %}
+                                                {{ participant.get_full_name }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ discussion.nom }}
+                                    {% endif %}
+                                </div>
+
+                                {% with dernier_message=discussion.dernier_message %}
+                                    {% if dernier_message %}
+                                        <div class="discussion-last-message">
+                                            {% if dernier_message.expediteur == user %}
+                                                Vous :
+                                            {% else %}
+                                                {{ dernier_message.expediteur.prenom }} :
+                                            {% endif %}
+                                            {% if dernier_message.type == 'media' %}
+                                                {% if dernier_message.media_type == 'image' %}
+                                                    🖼️ Image
+                                                {% elif dernier_message.media_type == 'video' %}
+                                                    🎥 Vidéo
+                                                {% elif dernier_message.media_type == 'audio' %}
+                                                    🎵 Audio
+                                                {% else %}
+                                                    📎 Document
+                                                {% endif %}
+                                            {% else %}
+                                                {{ dernier_message.contenu|truncatechars:50 }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+
+                                {% if discussion.type == 'groupe' %}
+                                    <div class="participants-list">
+                                        {{ discussion.participants.count }} participants
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="discussion-meta">
+                                <div class="discussion-date">
+                                    {% if discussion.date_modification|date:"Y-m-d" == today %}
+                                        {{ discussion.date_modification|time:"H:i" }}
+                                    {% else %}
+                                        {{ discussion.date_modification|date:"d/m/Y" }}
+                                    {% endif %}
+                                </div>
+                                {% with nb_non_lus=discussion.nombre_messages_non_lus %}
+                                    {% if nb_non_lus > 0 %}
+                                        <span class="badge-unread">{{ nb_non_lus }}</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-discussion">
+                <p>Vous n'avez pas encore de discussions.</p>
+                <p>Commencez à discuter avec d'autres utilisateurs !</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.discussions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.discussion-item {
+    border-bottom: 1px solid #eee;
+}
+
+.discussion-item:last-child {
+    border-bottom: none;
+}
+
+.discussion-link {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s;
+}
+
+.discussion-link:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+    color: inherit;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.discussion-info {
+    flex: 1;
+}
+
+.discussion-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.discussion-last-message {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.discussion-meta {
+    text-align: right;
+    min-width: 100px;
+}
+
+.discussion-date {
+    color: #6c757d;
+    font-size: 0.8em;
+}
+
+.badge-unread {
+    background-color: #007bff;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.participants-list {
+    color: #6c757d;
+    font-size: 0.8em;
+    margin-top: 3px;
+}
+</style>
+{% endblock %}
