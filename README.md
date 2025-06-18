@@ -89,9 +89,9 @@ ___
 
 ## Configuration de la base de données 
 
-### Option 1 : Utiliser le fichier structure.sql
+### Option 1 : Utiliser le fichier structure.sql (méthode démo)
 
-1. **Créer une base de données MySQL appelée `ifri_comotorage` (méthode démo)**
+1. **Créer une base de données MySQL appelée `ifri_comotorage`**
 
 2. **Importer le fichier**
 
@@ -113,6 +113,20 @@ ___
          }
     }
     ```
+
+4. **Données de connexion**
+
+     - Compte 1 : Compte passager 
+        - Email : kpogbemebrunel@gmail.com
+        - Mot de passe : 12345678
+
+    - Compte 2 : Compte Conducteur 
+        - Email : felix@gmail.com
+        - Mot de passe : 111213
+    
+  - Compte 3 : Compte Passager
+        - Email : ulrich@gmail.com
+        - Mot de passe : 101112
 
 ---
 
@@ -165,6 +179,13 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 
 
 
+
+---
+
+# :+1: Pour testet la messagerie , veillez ouvrir le lien dans différents navigateurs avec différents comptes pour vous envoyer des messages 
+
+---
+
 # :aerial_tramway:Contribuer 
 
 **Les contributions sont les bienvenues**
@@ -192,3 +213,5 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 ---
 
 # 💯 Pour plus d'informations sur les téléchargements des paquets et d'instructions très détaillés , veillez consultez le rapport.html 
+
+
