@@ -1,0 +1,22 @@
+<input id="msgInput" type="text">
+<button onclick="sendMessage()">Envoyer</button>
+<ul id="chatBox"></ul>
+
+<script>
+    const username = "{{ username }}";  // Passé depuis Django context
+    const socket = new WebSocket('ws://' + window.location.host + '/ws/chat/' + username + '/');
+
+    socket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const li = document.createElement("li");
+        li.textContent = `${data.sender}: ${data.message}`;
+        document.getElementById("chatBox").appendChild(li);
+    };
+
+    function sendMessage() {
+        const input = document.getElementById("msgInput");
+        const message = input.value;
+        socket.send(JSON.stringify({'message': message}));
+        input.value = "";
+    }
+</script>

@@ -1,0 +1,8 @@
+<h3>Discuter avec un autre utilisateur</h3>
+<ul>
+  {% for utilisateur in utilisateurs %}
+    {% if utilisateur != request.user %}
+      <li><a href="{% url 'demarrer_discussion' utilisateur.id %}">{{ utilisateur.username }}</a></li>
+    {% endif %}
+  {% endfor %}
+</ul>

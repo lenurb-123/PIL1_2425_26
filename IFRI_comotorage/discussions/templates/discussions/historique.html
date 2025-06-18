@@ -1,0 +1,167 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+{% block title %}Historique de la discussion{% endblock %}
+
+{% block styles %}
+<style>
+    .message-item {
+        margin-bottom: 1.5em;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 1em;
+    }
+    
+    .message-media {
+        max-width: 250px;
+        max-height: 200px;
+        border-radius: 8px;
+        margin: 8px 0;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .message-media:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Styles spécifiques pour les images */
+    .message-media[src*=".jpg"], 
+    .message-media[src*=".jpeg"], 
+    .message-media[src*=".png"], 
+    .message-media[src*=".gif"], 
+    .message-media[src*=".webp"] {
+        width: auto;
+        height: auto;
+        object-fit: cover;
+    }
+    
+    /* Styles pour les vidéos */
+    .message-media[src*=".mp4"], 
+    .message-media[src*=".webm"], 
+    .message-media[src*=".ogg"] {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+    }
+    
+    /* Modal pour agrandir les images */
+    .image-modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.9);
+        cursor: pointer;
+    }
+    
+    .image-modal img {
+        max-width: 90%;
+        max-height: 90%;
+        margin: auto;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 8px;
+    }
+    
+    .image-modal .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    
+    .image-modal .close:hover {
+        color: #bbb;
+    }
+    
+    @media (max-width: 768px) {
+        .message-media {
+            max-width: 200px;
+            max-height: 150px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h2>Historique de la discussion : {{ discussion.nom|default:"Privée" }}</h2>
+    <div class="messages-list">
+        {% for message in messages %}
+            <div class="message-item">
+                <strong>{{ message.expediteur.prenom }} {{ message.expediteur.nom }}</strong>
+                <span style="color: #888; font-size: 0.9em;">({{ message.date_envoi|date:'d/m/Y H:i' }})</span>
+                <div>
+                    {{ message.contenu|linebreaksbr }}
+                </div>
+                {% if message.media %}
+                    {% if message.media_type == 'image' %}
+                        <div><img src="{{ message.media.url }}" alt="Image" class="message-media"></div>
+                    {% elif message.media_type == 'video' %}
+                        <div><video controls src="{{ message.media.url }}" class="message-media"></video></div>
+                    {% elif message.media_type == 'audio' %}
+                        <div><audio controls src="{{ message.media.url }}" class="message-media"></audio></div>
+                    {% else %}
+                        <div><a href="{{ message.media.url }}" download class="message-media">Télécharger le fichier</a></div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>Aucun message dans cette discussion.</p>
+        {% endfor %}
+    </div>
+    <a href="{% url 'liste_discussions' %}" class="btn btn-secondary mt-3">Retour à mes discussions</a>
+</div>
+
+<!-- Modal pour agrandir les images -->
+<div id="imageModal" class="image-modal">
+    <span class="close">&times;</span>
+    <img id="modalImage" src="" alt="Image agrandie">
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Gestion du modal pour agrandir les images
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeBtn = document.getElementsByClassName('close')[0];
+
+    // Fermer le modal en cliquant sur X
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Fermer le modal en cliquant en dehors de l'image
+    modal.onclick = function(e) {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Fermer le modal avec la touche Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            modal.style.display = "none";
+        }
+    });
+
+    // Ajouter des événements de clic sur les images
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('message-media') && 
+            (e.target.src && e.target.src.match(/\.(jpg|jpeg|png|gif|webp)$/i))) {
+            modalImg.src = e.target.src;
+            modal.style.display = "block";
+        }
+    });
+</script>
+{% endblock %} 

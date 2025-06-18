@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Discussion avec {{ utilisateur.prenom }} {{ utilisateur.nom }}</h2>
+<a href="{% url 'demarrer_discussion' utilisateur.id %}" class="btn btn-primary mt-3">Démarrer une discussion</a>
+<!-- Tu peux afficher les messages ici -->
+{% endblock %}

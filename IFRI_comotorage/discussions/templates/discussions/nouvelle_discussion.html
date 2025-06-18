@@ -1,0 +1,326 @@
+{% extends 'comptes/base.html' %}
+{% block title %}Nouvelle discussion{% endblock %}
+{% block styles %}
+<style>
+.nouvelle-discussion-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    padding: 2.5rem 2rem 2rem 2rem;
+}
+.nouvelle-discussion-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.nouvelle-discussion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+#search-user {
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #eaeaea;
+    font-size: 1.05rem;
+    background: #f8fafc;
+    color: #222;
+}
+#search-user:focus {
+    border-color: #2AABEE;
+    outline: none;
+}
+.suggestions-list {
+    background: #fff;
+    border: 1.5px solid #eaeaea;
+    border-radius: 10px;
+    margin-top: 0.2rem;
+    max-height: 220px;
+    overflow-y: auto;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.suggestions-list.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+}
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+.suggestion-item:hover {
+    background:rgb(3, 6, 12);
+    color: white;
+   
+}
+.suggestion-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eaeaea;
+    transition: transform 0.2s ease;
+}
+.suggestion-item:hover .suggestion-avatar {
+    transform: scale(1.1);
+}
+.suggestion-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.suggestion-name {
+    font-weight: 500;
+    color: #333;
+}
+.suggestion-email {
+    font-size: 0.85rem;
+    color: #666;
+}
+.suggestion-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.suggestion-discuter-btn {
+    background: #2AABEE;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.3rem 1rem;
+    font-size: 0.98rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.suggestion-discuter-btn:hover {
+    background: #111;
+    transform: translateY(-2px);
+}
+.loading-spinner {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2AABEE;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 10px;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.no-results {
+    padding: 1rem;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+.selected-users {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+.selected-user {
+    background: #2AABEE;
+    color: #fff;
+    border-radius: 20px;
+    padding: 0.3rem 0.9rem 0.3rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 1rem;
+}
+.selected-user .remove-user {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-left: 0.2rem;
+}
+#group-name {
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 1.5px solid #eaeaea;
+    font-size: 1.05rem;
+    background: #f8fafc;
+    color: #222;
+    margin-bottom: 0.5rem;
+}
+.btn-primary {
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-primary:hover {
+    background: #2AABEE;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="nouvelle-discussion-container">
+    <div class="nouvelle-discussion-title">Démarrer une nouvelle discussion</div>
+    <form class="nouvelle-discussion-form" id="new-discussion-form" autocomplete="off">
+        <div style="position:relative;">
+            <div class="selected-users" id="selected-users"></div>
+            <div style="position:relative;display:flex;align-items:center;">
+                <input type="text" id="search-user" class="form-control" placeholder="Nom, prénom ou email..." autocomplete="off">
+                <div class="loading-spinner" id="loading-spinner"></div>
+            </div>
+            <div class="suggestions-list" id="suggestions-list"></div>
+        </div>
+        <input type="text" id="group-name" class="form-control" placeholder="Nom du groupe (optionnel)" style="display:none;">
+        <button type="submit" class="btn btn-primary">Créer</button>
+    </form>
+</div>
+<script>
+const searchInput = document.getElementById('search-user');
+const suggestionsList = document.getElementById('suggestions-list');
+const selectedUsersDiv = document.getElementById('selected-users');
+const groupNameInput = document.getElementById('group-name');
+const loadingSpinner = document.getElementById('loading-spinner');
+let selectedUsers = [];
+let searchTimeout;
+
+// Fonction pour effectuer la recherche
+function performSearch(query) {
+    if (query.length < 1) {
+        suggestionsList.classList.remove('visible');
+        return;
+    }
+
+    loadingSpinner.style.display = 'block';
+    
+    console.log('Envoi de la requête de recherche...');  // Debug log
+    fetch(`/recherche-utilisateurs/?q=${encodeURIComponent(query)}`)
+        .then(r => {
+            console.log('Réponse reçue:', r.status);  // Debug log
+            return r.json();
+        })
+        .then(data => {
+            console.log('Données reçues:', data);  // Debug log
+            suggestionsList.innerHTML = '';
+            if (data.utilisateurs.length > 0) {
+                data.utilisateurs.forEach(u => {
+                    if (!selectedUsers.some(su => su.id === u.id)) {
+                        const item = document.createElement('div');
+                        item.className = 'suggestion-item';
+                        item.innerHTML = `
+                            <img src="${u.avatar}" class="suggestion-avatar" alt="${u.nom}">
+                            <div class="suggestion-info">
+                                <span class="suggestion-name">${u.nom}</span>
+                                <span class="suggestion-email">${u.email}</span>
+                            </div>
+                            <div class="suggestion-actions">
+                                <button class="suggestion-discuter-btn" type="button">Discuter</button>
+                            </div>
+                        `;
+                        
+                        // Bouton Discuter
+                        item.querySelector('.suggestion-discuter-btn').onclick = (e) => {
+                            e.stopPropagation();
+                            window.location.href = `/demarrer/${u.id}/`;
+                        };
+                        
+                        // Sélection classique (pour groupe)
+                        item.onclick = (e) => {
+                            if (e.target.classList.contains('suggestion-discuter-btn')) return;
+                            selectedUsers.push(u);
+                            renderSelectedUsers();
+                            suggestionsList.classList.remove('visible');
+                            searchInput.value = '';
+                            groupNameInput.style.display = selectedUsers.length > 1 ? '' : 'none';
+                        };
+                        
+                        suggestionsList.appendChild(item);
+                    }
+                });
+                suggestionsList.classList.add('visible');
+            } else {
+                suggestionsList.innerHTML = '<div class="no-results">Aucun utilisateur trouvé</div>';
+                suggestionsList.classList.add('visible');
+            }
+        })
+        .finally(() => {
+            loadingSpinner.style.display = 'none';
+        });
+}
+
+// Gestionnaire d'événements pour l'input avec debounce
+searchInput.addEventListener('input', function() {
+    const val = this.value.trim();
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => performSearch(val), 300);
+});
+
+function renderSelectedUsers() {
+    selectedUsersDiv.innerHTML = '';
+    selectedUsers.forEach(u => {
+        const el = document.createElement('div');
+        el.className = 'selected-user';
+        el.innerHTML = `
+            <img src="${u.avatar}" style="width:22px;height:22px;border-radius:50%;margin-right:4px;">
+            ${u.nom}
+            <button class='remove-user' title='Retirer'>&times;</button>
+        `;
+        el.querySelector('.remove-user').onclick = () => {
+            selectedUsers = selectedUsers.filter(su => su.id !== u.id);
+            renderSelectedUsers();
+            groupNameInput.style.display = selectedUsers.length > 1 ? '' : 'none';
+        };
+        selectedUsersDiv.appendChild(el);
+    });
+}
+
+// Fermer les suggestions quand on clique en dehors
+document.addEventListener('click', function(e) {
+    if (!suggestionsList.contains(e.target) && e.target !== searchInput) {
+        suggestionsList.classList.remove('visible');
+    }
+});
+
+document.getElementById('new-discussion-form').onsubmit = function(e) {
+    e.preventDefault();
+    if (selectedUsers.length === 0) {
+        alert('Sélectionnez au moins un utilisateur.');
+        return;
+    }
+    if (selectedUsers.length === 1) {
+        window.location.href = `/demarrer/${selectedUsers[0].id}/`;
+    } else {
+        const ids = selectedUsers.map(u => u.id).join(',');
+        const groupName = groupNameInput.value.trim();
+        let url = `/creer-groupe/?ids=${ids}`;
+        if (groupName) url += `&nom=${encodeURIComponent(groupName)}`;
+        window.location.href = url;
+    }
+};
+</script>
+{% endblock %} 
