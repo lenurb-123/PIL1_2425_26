@@ -1,0 +1,118 @@
+ * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+           /* background: linear-gradient(to right,rgba(176, 6, 243, 0.24),rgba(183, 5, 253, 0.158),rgba(183, 5, 253,0.1));*/
+            background-color: rgba(238, 239, 241, 0.98); 
+            color: red;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+           
+        }
+        p {
+           font-size: 18px;
+        }
+        .form-box{
+            
+            background: #4080bf01;
+            padding: 30px;
+            font-size: 13px;
+            padding-top: 10px;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 350px;
+            transition: all 0.3s ease;
+            margin: 0 auto; /* Centrer horizontalement */
+
+           
+        }
+        textarea:focus,
+        input:focus,
+        button:focus {
+                border: none;
+                outline: none;
+                box-shadow: none;
+            }
+
+        .form-container:hover {
+            box-shadow: 0 0 15px #05bafb1e;
+            background: #a3d8ed06;
+            scale: 1.02;
+        }
+         .form-box h2 {
+            text-align: center;
+            color: #0f94f4;
+            font-size: 20px;
+        }
+        
+        label {
+            font-weight: bold;
+        }
+
+        .form-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* 100% de la hauteur de la fenêtre */
+            
+        }
+
+    
+       
+        input[type="email"],
+        input[type="password"] ,
+        input[name="nom"],
+        input[name="prenom"],
+        input[name="telephone"],
+        input[name="confirm_mot_de_passe"]{
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #06a6ef;
+            border-radius: 5px;
+           
+        }
+
+        .btn.btnPrimary,.btn.btnPrimary1{
+            margin-top: 10px;
+            background-color: #0da4f5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 48%;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input[type="submit"]
+        {
+            background-color: #0ca2f9;
+            color: white;
+            border: 10 solid #007bff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+       
+    
+        .error {
+            color: red;
+            font-size: 14px;
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        
