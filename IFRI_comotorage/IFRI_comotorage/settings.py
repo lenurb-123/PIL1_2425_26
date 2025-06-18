@@ -123,8 +123,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'IFRI_comotorage',
         'USER': 'root',
-        'PASSWORD': '#11+=?Na',
-        # 'USER': 'groupe_26_ifri_covoiturage',
+        'PASSWORD': 'votre_mot_de_passe_sql',
         'HOST': 'localhost',
         'PORT': '3306',
         'OPTIONS': {
