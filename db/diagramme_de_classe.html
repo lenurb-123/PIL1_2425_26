@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Diagramme de classes - IFRI Comotorage</title>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+    <style>
+      body { background: #f8f9fa; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
+      .container { max-width: 1200px; margin: 2rem auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 32px rgba(0,0,0,0.08); padding: 2rem; }
+      h1 { text-align: center; color: #222; margin-bottom: 2rem; }
+      .mermaid { background: #fff; border-radius: 12px; padding: 1rem; }
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="container">
+    <h1>Diagramme de classes - IFRI Comotorage</h1>
+    <div class="mermaid">
+classDiagram
+    class Utilisateur {
+        email
+        nom
+        prenom
+        telephone
+        vehicule
+        immatriculation
+        date_naissance
+        adresse
+        ville
+        departement
+        photo_profil
+        date_inscription
+        derniere_connexion
+        est_verifie
+        est_actif
+        est_bloque
+        date_blocage
+        raison_blocage
+        date_derniere_modification
+        role
+        adresse_depart_habituelle
+        heure_depart_habituelle
+        heure_arrivee_habituelle
+        marque_vehicule
+        modele_vehicule
+        places_disponibles
+        is_active
+        is_staff
+        deux_facteurs_active
+        deux_facteurs_code
+        deux_facteurs_code_expiration
+        two_factor_enabled
+        totp_secret
+    }
+    class Notification {
+        user (FK Utilisateur)
+        type
+        titre
+        message
+        lu
+        date_creation
+        lien
+    }
+    class Newsletter {
+        email
+        date_inscription
+        actif
+    }
+    class Conversation {
+        type
+        name
+        created_at
+        updated_at
+        participants (M2M Utilisateur via Participant)
+    }
+    class Participant {
+        conversation (FK Conversation)
+        user (FK Utilisateur)
+        joined_at
+        is_admin
+    }
+    class ChatMessage {
+        conversation (FK Conversation)
+        sender (FK Utilisateur)
+        content
+        created_at
+        is_read
+    }
+    class Message {
+        discussion (FK Discussion)
+        expediteur (FK Utilisateur)
+        destinataire (FK Utilisateur)
+        contenu
+        date_envoie
+        lu
+        fichier
+    }
+    class Trajet {
+        conducteur_nom
+        conducteur_prenom
+        depart
+        arrivee
+        heure_depart
+        heure_arrivee
+        places_disponibles
+        tarif
+    }
+    class Reservation {
+        trajet (FK Trajet)
+        passager_nom
+        passager_prenom
+        depart
+        arrivee
+        heure_depart
+        heure_arrivee
+        places_reservees
+        date_reservation
+        created_le
+    }
+    class Avis {
+        trajet (FK Trajet)
+        auteur (FK Utilisateur)
+        destinataire (FK Utilisateur)
+        note
+        commentaire
+    }
+    class TrajetTaxi {
+        conducteur (FK Utilisateur)
+        lieu_depart
+        lieu_arrivee
+        heure_depart
+        jours_semaine
+        places_disponibles
+        date_creation
+        statut
+        tarif
+    }
+    class TrajetPassage {
+        passager (FK Utilisateur)
+        lieu_depart
+        lieu_arrivee
+        heure_souhaitee
+        jours_semaine
+        date_creation
+        statut
+        tarif
+    }
+    class PositionUtilisateur {
+        utilisateur (OneToOne Utilisateur)
+        latitude
+        longitude
+        updated_at
+    }
+    Utilisateur "1" --o "*" Notification : reçoit
+    Utilisateur "1" --o "*" Participant : participe
+    Utilisateur "1" --o "*" ChatMessage : envoie
+    Utilisateur "1" --o "*" Message : envoie/ reçoit
+    Utilisateur "1" --o "*" Avis : donne/reçoit
+    Utilisateur "1" --o "*" TrajetTaxi : conduit
+    Utilisateur "1" --o "*" TrajetPassage : réserve
+    Utilisateur "1" --o "1" PositionUtilisateur : localisé
+    Conversation "1" --o "*" Participant : a
+    Conversation "1" --o "*" ChatMessage : contient
+    Trajet "1" --o "*" Reservation : a
+    Trajet "1" --o "*" Avis : reçoit
+    TrajetTaxi <|-- Trajet
+    TrajetPassage <|-- Trajet
+    </div>
+  </div>
+</body>
+</html> 
