@@ -124,7 +124,7 @@ ___
         - Email : felix@gmail.com
         - Mot de passe : 111213
     
-    
+
     - Compte 3 : Compte Passager
         - Email : ulrich@gmail.com
         - Mot de passe : 101112
@@ -135,7 +135,7 @@ ___
 
 - **Créer la base de données MySQL appelée `ifri_comotorage`**
 
-- **Modifier le fichier `settings.py`  de votre apllication IFRI_comotorage :**
+- **Modifier le fichier `settings.py`  de votre application  principale IFRI_comotorage :**
 
     ```python
     DATABASES = {
