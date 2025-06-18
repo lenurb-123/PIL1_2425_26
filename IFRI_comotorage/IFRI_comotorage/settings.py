@@ -121,7 +121,7 @@ CORS_ALLOWED_ORIGINS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'IFRI_comotorage',
+        'NAME': 'ifri_comotorage',
         'USER': 'root',
         'PASSWORD': 'votre_mot_de_passe_sql',
         'HOST': 'localhost',
