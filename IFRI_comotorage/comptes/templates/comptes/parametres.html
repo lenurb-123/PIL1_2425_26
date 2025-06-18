@@ -28,6 +28,9 @@
                         <a href="#securite" class="list-group-item list-group-item-action" data-bs-toggle="list">
                             <i class="fas fa-lock me-2"></i> Sécurité
                         </a>
+                        <a href="#confidentialite" class="list-group-item list-group-item-action" data-bs-toggle="list">
+                            <i class="fas fa-shield-alt me-2"></i> Confidentialité
+                        </a>
                         <a href="#notifications" class="list-group-item list-group-item-action" data-bs-toggle="list">
                             <i class="fas fa-bell me-2"></i> Notifications
                         </a>
@@ -74,9 +77,37 @@
                                             <option value="passager" {% if form.role.value == 'passager' %}selected{% endif %}>Passager</option>
                                         </select>
                                     </div>
+                                    
+                                    <!-- Champs spécifiques aux conducteurs -->
+                                    <div class="vehicule-fields" {% if form.role.value != 'conducteur' %}style="display: none;"{% endif %}>
+                                        <div class="col-md-6">
+                                            <label for="id_immatriculation" class="form-label">Immatriculation</label>
+                                            <input type="text" class="form-control" id="id_immatriculation" name="immatriculation" value="{{ form.immatriculation.value }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="id_marque_vehicule" class="form-label">Marque du véhicule</label>
+                                            <input type="text" class="form-control" id="id_marque_vehicule" name="marque_vehicule" value="{{ form.marque_vehicule.value }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="id_modele_vehicule" class="form-label">Modèle du véhicule</label>
+                                            <input type="text" class="form-control" id="id_modele_vehicule" name="modele_vehicule" value="{{ form.modele_vehicule.value }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="id_places_disponibles" class="form-label">Places disponibles</label>
+                                            <input type="number" class="form-control" id="id_places_disponibles" name="places_disponibles" value="{{ form.places_disponibles.value }}" min="1">
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
-                                        <label for="id_immatriculation" class="form-label">Immatriculation</label>
-                                        <input type="text" class="form-control" id="id_immatriculation" name="immatriculation" value="{{ form.immatriculation.value }}">
+                                        <label for="id_heure_depart_habituelle" class="form-label">Heure de départ habituelle</label>
+                                        <input type="time" class="form-control" id="id_heure_depart_habituelle" name="heure_depart_habituelle" value="{{ form.heure_depart_habituelle.value }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="id_heure_arrivee_habituelle" class="form-label">Heure d'arrivée habituelle</label>
+                                        <input type="time" class="form-control" id="id_heure_arrivee_habituelle" name="heure_arrivee_habituelle" value="{{ form.heure_arrivee_habituelle.value }}">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="id_adresse_depart_habituelle" class="form-label">Adresse de départ habituelle</label>
+                                        <input type="text" class="form-control" id="id_adresse_depart_habituelle" name="adresse_depart_habituelle" value="{{ form.adresse_depart_habituelle.value }}">
                                     </div>
                                     <div class="col-12">
                                         <label for="id_photo_profil" class="form-label">Photo de profil</label>
@@ -125,6 +156,82 @@
                                     </button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confidentialité Section -->
+                <div class="tab-pane fade" id="confidentialite">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-shield-alt me-2"></i>Paramètres de confidentialité
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- 2FA Section -->
+                            <div class="mb-4">
+                                <h6 class="mb-3">Authentification à deux facteurs (2FA)</h6>
+                                <p class="text-muted mb-3">
+                                    L'authentification à deux facteurs ajoute une couche de sécurité supplémentaire à votre compte en demandant un code à usage unique en plus de votre mot de passe.
+                                </p>
+                                
+                                {% if user.two_factor_enabled %}
+                                <div class="alert alert-success d-flex align-items-center" role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>
+                                    <div>
+                                        La vérification à deux facteurs est activée sur votre compte.
+                                    </div>
+                                </div>
+                                <form method="post" action="{% url 'disable_2fa' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-shield-alt me-2"></i>Désactiver la 2FA
+                                    </button>
+                                </form>
+                                {% else %}
+                                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <div>
+                                        La vérification à deux facteurs n'est pas activée sur votre compte.
+                                    </div>
+                                </div>
+                                <a href="{% url 'setup_2fa' %}" class="btn btn-dark">
+                                    <i class="fas fa-shield-alt me-2"></i>Activer la 2FA
+                                </a>
+                                {% endif %}
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- Autres paramètres de confidentialité -->
+                            <div class="mb-4">
+                                <h6 class="mb-3">Visibilité du profil</h6>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="profileVisibility" checked>
+                                    <label class="form-check-label" for="profileVisibility">
+                                        Rendre mon profil visible aux autres utilisateurs
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch mb-3">
+                                    <input class="form-check-input" type="checkbox" id="phoneVisibility" checked>
+                                    <label class="form-check-label" for="phoneVisibility">
+                                        Afficher mon numéro de téléphone
+                                    </label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="locationSharing">
+                                    <label class="form-check-label" for="locationSharing">
+                                        Partager ma position en temps réel pendant les trajets
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-dark">
+                                    <i class="fas fa-save me-2"></i>Enregistrer les préférences
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -305,6 +412,19 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
+
+    const roleSelect = document.getElementById('id_role');
+    const vehiculeFields = document.querySelector('.vehicule-fields');
+
+    function toggleVehiculeFields() {
+        if (roleSelect.value === 'conducteur') {
+            vehiculeFields.style.display = 'block';
+        } else {
+            vehiculeFields.style.display = 'none';
+        }
+    }
+
+    roleSelect.addEventListener('change', toggleVehiculeFields);
 });
 </script>
 {% endblock %} 

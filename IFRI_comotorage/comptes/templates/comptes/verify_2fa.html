@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Vérification à deux facteurs</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p>Veuillez entrer le code à 6 chiffres généré par votre application d'authentification.</p>
+                    </div>
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="token">Code de vérification :</label>
+                            <input type="text" class="form-control" id="token" name="token" 
+                                   required maxlength="6" pattern="\d{6}" autofocus
+                                   placeholder="Entrez le code à 6 chiffres">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-4">Vérifier</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+.card-title {
+    margin-bottom: 0;
+    color: #333;
+    font-weight: 600;
+    text-align: center;
+}
+.card-body {
+    padding: 2rem;
+}
+.alert {
+    border-radius: 8px;
+}
+.form-control {
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    text-align: center;
+}
+.btn {
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+.btn-block {
+    width: 100%;
+}
+</style>
+{% endblock %} 

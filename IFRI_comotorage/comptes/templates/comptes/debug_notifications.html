@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Debug des Notifications</h2>
+    
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Utilisateur</th>
+                    <th>Type</th>
+                    <th>Titre</th>
+                    <th>Message</th>
+                    <th>Lu</th>
+                    <th>Lien</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notif in notifications %}
+                <tr>
+                    <td>{{ notif.date_creation }}</td>
+                    <td>{{ notif.user.get_full_name }}</td>
+                    <td><span class="badge badge-info">{{ notif.type_notif }}</span></td>
+                    <td>{{ notif.titre }}</td>
+                    <td>{{ notif.message }}</td>
+                    <td>
+                        {% if notif.lu %}
+                            <span class="badge badge-success">Lu</span>
+                        {% else %}
+                            <span class="badge badge-warning">Non lu</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if notif.lien %}
+                            <a href="{{ notif.lien }}" class="btn btn-sm btn-primary">Voir</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucune notification</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

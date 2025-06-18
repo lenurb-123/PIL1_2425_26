@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Configuration de l'authentification à deux facteurs</h3>
+                </div>
+                <div class="card-body">
+                    {% if not user.two_factor_enabled %}
+                        <div class="alert alert-info">
+                            <h4 class="alert-heading">Instructions :</h4>
+                            <ol>
+                                <li>Téléchargez une application d'authentification comme Google Authenticator sur votre téléphone</li>
+                                <li>Scannez le QR code ci-dessous avec l'application</li>
+                                <li>Entrez le code à 6 chiffres généré par l'application pour activer la 2FA</li>
+                            </ol>
+                        </div>
+
+                        {% if qr_code %}
+                            <div class="text-center mb-4">
+                                {{ qr_code|safe }}
+                            </div>
+                            
+                            <div class="alert alert-warning">
+                                <strong>Clé secrète :</strong> {{ secret_key }}<br>
+                                <small>Si vous ne pouvez pas scanner le QR code, vous pouvez entrer cette clé manuellement dans votre application.</small>
+                            </div>
+
+                            <form method="post" class="mt-4">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="token">Code de vérification :</label>
+                                    <input type="text" class="form-control" id="token" name="token" 
+                                           required maxlength="6" pattern="\d{6}"
+                                           placeholder="Entrez le code à 6 chiffres">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-3">Activer la 2FA</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-success">
+                            <h4 class="alert-heading">2FA est activée !</h4>
+                            <p>L'authentification à deux facteurs est actuellement active sur votre compte.</p>
+                        </div>
+
+                        <form method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir désactiver la 2FA ? Cela réduira la sécurité de votre compte.');">
+                            {% csrf_token %}
+                            <input type="hidden" name="disable_2fa" value="1">
+                            <button type="submit" class="btn btn-danger">Désactiver la 2FA</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.card {
+    border: none;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+    padding: 1.5rem;
+}
+.card-title {
+    margin-bottom: 0;
+    color: #333;
+    font-weight: 600;
+}
+.card-body {
+    padding: 2rem;
+}
+.alert {
+    border-radius: 8px;
+}
+.form-control {
+    border-radius: 6px;
+    padding: 0.75rem;
+}
+.btn {
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-weight: 500;
+}
+</style>
+{% endblock %} 
