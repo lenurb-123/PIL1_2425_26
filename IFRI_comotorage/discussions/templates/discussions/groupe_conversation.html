@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Conversation{% if groupe.type == 'groupe' %} - Groupe{% endif %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .chat-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.07);
+            padding: 0 0 20px 0;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 20px 10px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .chat-photo {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #e8f0fe;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #187bcd;
+        }
+        .chat-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3436;
+        }
+        .chat-members {
+            font-size: 13px;
+            color: #636e72;
+            margin-top: 2px;
+        }
+        .chat-messages {
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 18px 20px 0 20px;
+        }
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+        .message.sent {
+            align-items: flex-end;
+        }
+        .message.received {
+            align-items: flex-start;
+        }
+        .message-content {
+            background: #e8f0fe;
+            color: #2d3436;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            max-width: 70%;
+            word-break: break-word;
+        }
+        .message.sent .message-content {
+            background: #187bcd;
+            color: #fff;
+        }
+        .meta {
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+        .chat-form {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            padding: 16px 20px 0 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .chat-form textarea {
+            flex: 1;
+            border-radius: 8px;
+            border: 1px solid #dfe6e9;
+            font-size: 14px;
+            padding: 10px;
+            resize: none;
+        }
+        .chat-form button {
+            background: #187bcd;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-form button:hover {
+            background: #0f66a8;
+        }
+        @media (max-width: 600px) {
+            .chat-container { max-width: 100vw; border-radius: 0; }
+            .chat-header, .chat-messages, .chat-form { padding-left: 8px; padding-right: 8px; }
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-header">
+        {% if groupe.photo %}
+            <img src="{{ groupe.photo.url }}" alt="Photo du groupe" class="chat-photo">
+        {% else %}
+            <div class="chat-photo"><i class="fas fa-users"></i></div>
+        {% endif %}
+        <div>
+            <div class="chat-title">
+                {% if groupe.type == 'groupe' and groupe.nom %}
+                    {{ groupe.nom }}
+                {% else %}
+                    {% for user in groupe.participants.all %}{% if not forloop.first %}, {% endif %}{{ user.prenom }} {{ user.nom }}{% endfor %}
+                {% endif %}
+            </div>
+            <div class="chat-members">
+                {% if groupe.type == 'groupe' %}
+                    Membres :
+                    {% for user in groupe.participants.all %}{{ user.prenom }} {{ user.nom }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                {% else %}
+                    Discussion privée
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="chat-messages">
+        {% for message in messages %}
+            <div class="message {% if message.expediteur == request.user %}sent{% else %}received{% endif %}">
+                <div class="message-content">{{ message.contenu }}</div>
+                <div class="meta">{{ message.date_envoie|date:"d/m/Y H:i" }}</div>
+            </div>
+        {% empty %}
+            <div style="text-align:center; color:#888; margin-top:40px;">Aucun message pour l'instant.</div>
+        {% endfor %}
+    </div>
+    <form class="chat-form" action="." method="post">
+        {% csrf_token %}
+        <textarea name="contenu" rows="2" placeholder="Écrire un message..." autocomplete="off"></textarea>
+        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+    </form>
+</div>
+</body>
+</html> 

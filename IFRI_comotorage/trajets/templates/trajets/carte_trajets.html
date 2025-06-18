@@ -1,0 +1,92 @@
+{% block content %}
+<h2 style="text-align:center; color:#2d3436; margin-bottom:20px;">🚗 Trajets disponibles</h2>
+<form method="get" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center; margin-bottom:20px;">
+  <label>Rôle :</label>
+  <select name="role">
+    <option value="">Tous</option>
+    <option value="conducteur">Conducteurs</option>
+    <option value="passager">Passagers</option>
+  </select>
+  <label>Jour :</label>
+  <select name="jour">
+    <option value="">Tous</option>
+    <option value="lundi">Lundi</option>
+    <option value="mardi">Mardi</option>
+    <option value="mercredi">Mercredi</option>
+    <option value="jeudi">Jeudi</option>
+    <option value="vendredi">Vendredi</option>
+  </select>
+  <button type="submit">Filtrer</button>
+</form>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+#map {
+  height: 500px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  margin-bottom: 30px;
+}
+.trajet-popup-title { font-weight:bold; color:#187bcd; }
+.trajet-popup-info { font-size:13px; color:#636e72; }
+</style>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const map = L.map('map').setView([6.4, 2.5], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 18,
+}).addTo(map);
+let markers = [];
+const trajets = [
+  {% for trajet in trajets_conducteurs %}
+    {
+      type: 'conducteur',
+      nom: '{{ trajet.conducteur.prenom|escapejs }} {{ trajet.conducteur.nom|escapejs }}',
+      depart: '{{ trajet.lieu_depart|escapejs }}',
+      arrivee: '{{ trajet.lieu_arrivee|escapejs }}',
+      heure: '{{ trajet.heure_depart|escapejs }}',
+      places: '{{ trajet.places_disponibles }}',
+      jours: '{{ trajet.jours_semaine|escapejs }}'
+    },
+  {% endfor %}
+  {% for trajet in trajets_passagers %}
+    {
+      type: 'passager',
+      nom: '{{ trajet.passager.prenom|escapejs }} {{ trajet.passager.nom|escapejs }}',
+      depart: '{{ trajet.lieu_depart|escapejs }}',
+      arrivee: '{{ trajet.lieu_arrivee|escapejs }}',
+      heure: '{{ trajet.heure_souhaitee|escapejs }}',
+      places: '-',
+      jours: '{{ trajet.jours_semaine|escapejs }}'
+    },
+  {% endfor %}
+];
+// Géocoder chaque adresse de départ et placer un marqueur
+trajets.forEach(function(trajet) {
+  fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(trajet.depart))
+    .then(response => response.json())
+    .then(data => {
+      if (data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lng = parseFloat(data[0].lon);
+        const marker = L.marker([lat, lng]).addTo(map);
+        marker.bindPopup(
+          `<div class='trajet-popup-title'>${trajet.nom} (${trajet.type})</div>` +
+          `<div class='trajet-popup-info'>Départ : ${trajet.depart}</div>` +
+          `<div class='trajet-popup-info'>Arrivée : ${trajet.arrivee}</div>` +
+          `<div class='trajet-popup-info'>Heure : ${trajet.heure} | Places : ${trajet.places}</div>` +
+          `<div class='trajet-popup-info'>Jours : ${trajet.jours}</div>`
+        );
+        markers.push(marker);
+      }
+    });
+});
+// Ajuste la vue de la carte après un court délai (pour attendre les géocodages)
+setTimeout(function() {
+  if (markers.length > 0) {
+    var group = new L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.2));
+  }
+}, 1200);
+</script>
+{% endblock %}
