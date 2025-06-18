@@ -136,6 +136,21 @@
                             <form method="post" class="needs-validation" novalidate>
                                 {% csrf_token %}
                                 <input type="hidden" name="change_password" value="1">
+                                
+                                {% if password_form.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                        {% for field in password_form %}
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% for error in password_form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <label for="id_old_password" class="form-label">Mot de passe actuel</label>
