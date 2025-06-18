@@ -91,7 +91,7 @@ ___
 
 ### Option 1 : Utiliser le fichier structure.sql
 
-1. **Créer une base de données MySQL appelée `ifri_comotorage`**
+1. **Créer une base de données MySQL appelée `ifri_comotorage` (méthode démo)**
 
 2. **Importer le fichier**
 
@@ -137,6 +137,13 @@ ___
 
 ---
 
+
+## :arrow_down: Accéder au dossier IFRI_comotorage
+
+    ```bash
+    cd IFRI_comotorage
+    ```
+
 ## :arrow_forward: Démarrer le projet 
 
 ```bash
@@ -156,3 +163,32 @@ python manage.py runserver
 
 Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 
+
+
+# Contribuer 
+
+**Les contributions sont les bienvenues**
+
+1. Fork le projet
+
+2. Crée une branche (git checkout -b feature/Nom)
+
+3. Commit tes modifications (git commit -m 'Ajout fonctionnalité')
+
+4. Push (git push origin feature/Nom)
+
+5. Ouvre une Pull Request
+
+# Nos Coordonnateurs 
+
+## Equipe pedagogique
+
+- Supervision: **M. Ratheil HOUNDJI**
+  ---
+- Encadrants:
+    - **M.Armand ACCROMBESSI** 
+    - **Mme .Maryse GAHOU**
+  
+---
+
+# Pour plus d'informations sur les téléchargements des paquets et d'instructions très détaillés , veillez consultez le rapport.html 

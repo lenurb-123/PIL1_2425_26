@@ -27,6 +27,7 @@ PyJWT==2.9.0
 PyMySQL==1.1.1
 pyotp==2.9.0
 qrcode==8.2
+redis==6.2.0
 requests==2.32.4
 requests-oauthlib==2.0.0
 setuptools==80.9.0
