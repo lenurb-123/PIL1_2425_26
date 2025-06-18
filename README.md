@@ -93,7 +93,7 @@ ___
 
 1. **Créer une base de données MySQL appelée `ifri_comotorage`**
 
-2. **Importer le fichier dans l'invite de commandes shell de MySQL avec la commande **
+2. **Importer le fichier dans l'invite de commandes shell de MySQL avec la commande**
 
     ```bash
     mysql -u root -p ifri_comotorage < db/structure.sql
