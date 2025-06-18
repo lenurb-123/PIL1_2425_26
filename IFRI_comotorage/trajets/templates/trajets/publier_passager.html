@@ -1,0 +1,261 @@
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #333333;
+        --accent-color: #666666;
+        --background-color: #ffffff;
+        --text-color: #000000;
+        --border-color: #e0e0e0;
+    }
+    .form-box {
+        background: var(--background-color);
+        padding: 35px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        width: 100%;
+        max-width: 400px;
+        margin: 30px auto;
+        border: 1px solid var(--border-color);
+    }
+    .form-title {
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        letter-spacing: -0.5px;
+    }
+    .form-group {
+        position: relative;
+        margin-bottom: 24px;
+    }
+    .form-group i {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent-color);
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+    .form-group label {
+        position: absolute;
+        left: 38px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        padding: 0 5px;
+        color: var(--accent-color);
+        font-size: 14px;
+        transition: all 0.3s;
+        pointer-events: none;
+    }
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label,
+    .form-group select:focus + label,
+    .form-group select:not(:placeholder-shown) + label {
+        top: 0;
+        left: 12px;
+        font-size: 12px;
+        color: var(--primary-color);
+        background: var(--background-color);
+        padding: 0 5px;
+    }
+    .form-group input:focus ~ i,
+    .form-group input:not(:placeholder-shown) ~ i,
+    .form-group select:focus ~ i,
+    .form-group select:not(:placeholder-shown) ~ i {
+        color: var(--primary-color);
+    }
+    input, select {
+        width: 100%;
+        padding: 14px 12px 14px 38px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--background-color);
+        font-size: 14px;
+        color: var(--text-color);
+        margin-bottom: 0;
+        transition: all 0.3s;
+    }
+    input::placeholder, select::placeholder { color: transparent; }
+    input:focus, select:focus {
+        border-color: var(--primary-color);
+        background: var(--background-color);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0,0,0,0.05);
+    }
+    .autocomplete-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-top: none;
+        max-height: 180px;
+        overflow-y: auto;
+        border-radius: 0 0 8px 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .autocomplete-suggestion {
+        padding: 12px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--text-color);
+        transition: background-color 0.2s;
+    }
+    .autocomplete-suggestion:hover {
+        background: rgba(0,0,0,0.03);
+    }
+    #map {
+        height: 200px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+    }
+    .map-label {
+        font-size: 14px;
+        color: var(--accent-color);
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+    .jours-checkboxes {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .jours-checkboxes label {
+        position: static !important;
+        transform: none !important;
+        font-size: 14px;
+        color: var(--text-color);
+        background: none;
+        padding-left: 4px;
+        pointer-events: auto;
+    }
+    button[type="submit"] {
+        width: 100%;
+        padding: 14px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    button[type="submit"]:hover {
+        background-color: var(--secondary-color);
+    }
+    @media (max-width: 480px) {
+        .form-box { 
+            padding: 25px 15px;
+            margin: 20px 10px;
+        }
+    }
+</style>
+<div class="form-box">
+    <div class="form-title">Publier une demande de trajet (Passager)</div>
+    {% if form.errors %}
+    <div class="alert alert-danger" style="border-radius:8px; color:#fff; background:#222; border:none; margin-bottom:20px;">
+        <ul style="margin-bottom:0;">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <form method="post" >
+        {% csrf_token %}
+        <div class="form-group" style="z-index:2;">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ form.lieu_depart }}
+            <label for="lieu_depart_autocomplete">Lieu de départ</label>
+            <div class="autocomplete-suggestions" id="suggestions-depart" style="display:none;"></div>
+        </div>
+        <div class="form-group" style="z-index:1;">
+            <i class="fas fa-map-marker-alt"></i>
+            {{ form.lieu_arrivee }}
+            <label for="lieu_arrivee_autocomplete">Lieu d'arrivée</label>
+            <div class="autocomplete-suggestions" id="suggestions-arrivee" style="display:none;"></div>
+        </div>
+        <div class="map-label">Visualisation du trajet :</div>
+        <div id="map"></div>
+        <div id="tarif" style="font-weight:bold; margin-bottom:20px;"></div>
+        <div class="form-group">
+            <i class="fas fa-clock"></i>
+            {{ form.heure_souhaitee }}
+            <label for="id_heure_souhaitee">Heure souhaitée</label>
+        </div>
+        <div class="form-group" style="margin-bottom: 24px;">
+            <i class="fas fa-calendar-alt"></i>
+            <span style="display:block; margin-left:32px; margin-bottom:6px; font-size:13px; color:#636e72; font-weight:500;">Jours souhaités</span>
+            <div class="jours-checkboxes">
+                {{ form.jours }}
+            </div>
+        </div>
+        <button type="submit" style="margin-top: 16px; width: 100%;">Publier</button>
+    </form>
+</div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const IFRI_LAT = 6.4183;
+const IFRI_LNG = 2.3554;
+function haversine(lat1, lon1, lat2, lon2) {
+    function toRad(x) { return x * Math.PI / 180; }
+    var R = 6371;
+    var dLat = toRad(lat2 - lat1);
+    var dLon = toRad(lon2 - lon1);
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+// Initialisation de la carte
+var map = L.map('map').setView([6.370292, 2.391236], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+}).addTo(map);
+var marker;
+map.on('click', function(e) {
+    var lat = e.latlng.lat;
+    var lng = e.latlng.lng;
+    if (marker) {
+        marker.setLatLng(e.latlng);
+    } else {
+        marker = L.marker(e.latlng).addTo(map);
+    }
+    document.getElementById('id_latitude_depart').value = lat;
+    document.getElementById('id_longitude_depart').value = lng;
+    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.display_name) {
+                document.getElementById('id_lieu_depart').value = data.display_name;
+            }
+        });
+    // Calcul du tarif
+    var distance = haversine(lat, lng, IFRI_LAT, IFRI_LNG);
+    var tarif = 200 + (distance * 1500);
+    document.getElementById('tarif').innerText =
+        'Tarif estimé : ' + Math.round(tarif) + ' FCFA (' + distance.toFixed(2) + ' km)';
+});
+</script>
+<script src="{% static 'js/autocomplete_adresse.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<style>
+    .matching-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+        align-items: flex-start;
+        margin: 30px auto;
+        max-width: 900px;
+    }
+    .matching-list {
+        flex: 1 1 300px;
+        min-width: 280px;
+        max-width: 350px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        padding: 20px 15px;
+        height: 420px;
+        overflow-y: auto;
+    }
+    .matching-list h2 {
+        font-size: 20px;
+        color: #2d3436;
+        margin-bottom: 16px;
+        text-align: center;
+    }
+    .trajet-item {
+        padding: 12px 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: background 0.2s;
+        border: 1px solid #e0e0e0;
+    }
+    .trajet-item:hover {
+        background: #e8f0fe;
+    }
+    .trajet-nom {
+        font-weight: bold;
+        color: #187bcd;
+    }
+    .trajet-info {
+        font-size: 13px;
+        color: #636e72;
+    }
+    .trajet-score {
+        font-size: 13px;
+        color: #27ae60;
+        font-weight: bold;
+    }
+    #map-matching {
+        flex: 2 1 350px;
+        min-width: 320px;
+        height: 420px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    @media (max-width: 900px) {
+        .matching-container { flex-direction: column; align-items: stretch; }
+        #map-matching { min-width: 0; width: 100%; height: 300px; margin-bottom: 20px; }
+        .matching-list { max-width: 100%; }
+    }
+</style>
+<div class="matching-container">
+    <div class="matching-list">
+        <h2>🚗 Résultats du matching</h2>
+        {% if resultats %}
+            {% for conducteur, score in resultats %}
+                <div class="trajet-item" data-adresse="{{ conducteur.lieu_depart }}" data-adresse2="{{ conducteur.lieu_arrivee }}" data-index="{{ forloop.counter0 }}">
+                    <div class="trajet-nom">{{ conducteur.conducteur.prenom }} {{ conducteur.conducteur.nom }}</div>
+                    <div class="trajet-info">Départ : {{ conducteur.lieu_depart }}</div>
+                    <div class="trajet-info">Arrivée : {{ conducteur.lieu_arrivee }}</div>
+                    <div class="trajet-info">Heure : {{ conducteur.heure_depart }} | Places : {{ conducteur.places_disponibles }}</div>
+                    <div class="trajet-score">Score : {{ score }}%</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Aucune correspondance trouvée pour ce trajet.</p>
+        {% endif %}
+    </div>
+    <div id="map-matching"></div>
+</div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var map = L.map('map-matching').setView([6.4, 2.5], 12);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+        var markers = [];
+        var items = document.querySelectorAll('.trajet-item');
+        // Utilise Nominatim pour géocoder chaque adresse
+        items.forEach(function(item, idx) {
+            var adresse = item.getAttribute('data-adresse');
+            var adresse2 = item.getAttribute('data-adresse2');
+            fetch('https://nominatim.openstreetmap.org/search?format=json&q=' + encodeURIComponent(adresse))
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        var lat = parseFloat(data[0].lat);
+                        var lng = parseFloat(data[0].lon);
+                        var marker = L.marker([lat, lng]).addTo(map);
+                        marker.bindPopup('<b>' + item.querySelector('.trajet-nom').textContent + '</b><br>Départ : ' + adresse + '<br>Arrivée : ' + adresse2);
+                        markers.push(marker);
+                        item.addEventListener('click', function() {
+                            map.setView([lat, lng], 14);
+                            marker.openPopup();
+                            items.forEach(i => i.style.background = '#f8f9fa');
+                            item.style.background = '#e8f0fe';
+                        });
+                    }
+                });
+        });
+        // Ajuste la vue de la carte après un court délai (pour attendre les géocodages)
+        setTimeout(function() {
+            if (markers.length > 0) {
+                var group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.2));
+            }
+        }, 1200);
+    });
+</script>
+{% endblock %}
