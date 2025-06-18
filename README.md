@@ -140,9 +140,9 @@ ___
 
 ## :arrow_down: Accéder au dossier IFRI_comotorage
 
-    ```bash
+```bash
     cd IFRI_comotorage
-    ```
+```
 
 ## :arrow_forward: Démarrer le projet 
 
@@ -165,7 +165,7 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 
 
 
-# Contribuer 
+# :aerial_tramway:Contribuer 
 
 **Les contributions sont les bienvenues**
 
@@ -179,7 +179,7 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
 
 5. Ouvre une Pull Request
 
-# Nos Coordonnateurs 
+# :classical_building: Nos Coordonnateurs 
 
 ## Equipe pedagogique
 
@@ -191,4 +191,4 @@ Ouvrir le navigateur : [https://127.0.0.1:8000](https://127.0.0.1:8000)
   
 ---
 
-# Pour plus d'informations sur les téléchargements des paquets et d'instructions très détaillés , veillez consultez le rapport.html 
+# 💯 Pour plus d'informations sur les téléchargements des paquets et d'instructions très détaillés , veillez consultez le rapport.html 
