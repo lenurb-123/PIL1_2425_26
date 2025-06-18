@@ -37,13 +37,21 @@
             <div class="matching-list">
                 <h2>🚗 Trajets disponibles</h2>
                 {% for trajet in trajets_conducteurs %}
-                    <div class="trajet-item" data-adresse="{{ trajet.lieu_depart }}" data-adresse2="{{ trajet.lieu_arrivee }}" data-index="{{ forloop.counter0 }}">
+                    <div class="trajet-item" 
+                         data-adresse="{{ trajet.lieu_depart }}" 
+                         data-adresse2="{{ trajet.lieu_arrivee }}" 
+                         data-index="{{ forloop.counter0 }}"
+                         data-trajet-id="{{ trajet.id }}"
+                         data-depart="{{ trajet.lieu_depart }}"
+                         data-arrivee="{{ trajet.lieu_arrivee }}"
+                         data-tarif="{{ trajet.tarif }}"
+                         style="cursor:pointer;">
                         <div class="trajet-nom">{{ trajet.conducteur.prenom }} {{ trajet.conducteur.nom }}</div>
                         <div class="trajet-info">Départ : {{ trajet.lieu_depart }}</div>
                         <div class="trajet-info">Arrivée : {{ trajet.lieu_arrivee }}</div>
                         <div class="trajet-info">Heure : {{ trajet.heure_depart }} | Places : {{ trajet.places_disponibles }}</div>
                         <div class="trajet-score">Score : {{ scores|default_if_none:""|slice:forloop.counter0|stringformat:"d" }}%</div>
-                        <a href="{% url 'reserver_trajet' trajet.id %}" class="btn btn-sm btn-primary mt-2">
+                        <a href="#" class="btn btn-sm btn-primary mt-2 reserver-btn">
                             <i class="bi bi-calendar-check"></i> Réserver
                         </a>
                     </div>
@@ -188,4 +196,22 @@
 
 <!-- Chargement du script d'autocomplétion -->
 <script src="{% static 'js/autocomplete_adresse.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var items = document.querySelectorAll('.trajet-item');
+        items.forEach(function(item) {
+            item.addEventListener('click', function(e) {
+                // Empêche le clic sur le bouton de faire un double événement
+                if(e.target.closest('.reserver-btn')) {
+                    e.preventDefault();
+                }
+                var trajetId = item.getAttribute('data-trajet-id');
+                var depart = encodeURIComponent(item.getAttribute('data-depart'));
+                var arrivee = encodeURIComponent(item.getAttribute('data-arrivee'));
+                var tarif = encodeURIComponent(item.getAttribute('data-tarif'));
+                window.location.href = `/payment/?depart=${depart}&arrivee=${arrivee}&tarif=${tarif}&type=conducteur&trajet_id=${trajetId}`;
+            });
+        });
+    });
+</script>
 {% endblock %}

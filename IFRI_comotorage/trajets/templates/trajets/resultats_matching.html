@@ -71,7 +71,14 @@
         <h2>🚗 Résultats du matching</h2>
         {% if resultats %}
             {% for conducteur, score in resultats %}
-                <div class="trajet-item" data-adresse="{{ conducteur.lieu_depart }}" data-adresse2="{{ conducteur.lieu_arrivee }}" data-index="{{ forloop.counter0 }}">
+                <div class="trajet-item" 
+                     data-adresse="{{ conducteur.lieu_depart }}" 
+                     data-adresse2="{{ conducteur.lieu_arrivee }}" 
+                     data-index="{{ forloop.counter0 }}"
+                     data-trajet-id="{{ conducteur.id }}"
+                     data-depart="{{ conducteur.lieu_depart }}"
+                     data-arrivee="{{ conducteur.lieu_arrivee }}"
+                     data-tarif="{{ conducteur.tarif }}">
                     <div class="trajet-nom">{{ conducteur.conducteur.prenom }} {{ conducteur.conducteur.nom }}</div>
                     <div class="trajet-info">Départ : {{ conducteur.lieu_depart }}</div>
                     <div class="trajet-info">Arrivée : {{ conducteur.lieu_arrivee }}</div>
@@ -85,6 +92,7 @@
     </div>
     <div id="map-matching"></div>
 </div>
+<div id="tarif" style="font-weight:bold; margin-bottom:20px;"></div>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -108,10 +116,12 @@
                         marker.bindPopup('<b>' + item.querySelector('.trajet-nom').textContent + '</b><br>Départ : ' + adresse + '<br>Arrivée : ' + adresse2);
                         markers.push(marker);
                         item.addEventListener('click', function() {
-                            map.setView([lat, lng], 14);
-                            marker.openPopup();
-                            items.forEach(i => i.style.background = '#f8f9fa');
-                            item.style.background = '#e8f0fe';
+                            // Redirection vers la page de paiement
+                            var trajetId = item.getAttribute('data-trajet-id');
+                            var depart = encodeURIComponent(item.getAttribute('data-depart'));
+                            var arrivee = encodeURIComponent(item.getAttribute('data-arrivee'));
+                            var tarif = encodeURIComponent(item.getAttribute('data-tarif'));
+                            window.location.href = `/payment/?depart=${depart}&arrivee=${arrivee}&tarif=${tarif}&type=conducteur&trajet_id=${trajetId}`;
                         });
                     }
                 });
@@ -124,5 +134,17 @@
             }
         }, 1200);
     });
+
+    document.getElementById('tarif').innerText =
+        'Tarif estimé : ' + Math.round(tarif) + ' FCFA (' + distance.toFixed(2) + ' km)';
 </script>
+{% if form.non_field_errors %}
+  <div class="alert alert-danger">
+    <ul>
+    {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endif %}
 {% endblock %}

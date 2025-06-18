@@ -63,6 +63,18 @@ class UtilisateurChangeForm(forms.ModelForm):
             'is_active', 'is_staff', 'is_superuser', 'deux_facteurs_active', 'photo_profil'
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Si l'utilisateur n'est pas conducteur, rendre les champs véhicule non obligatoires
+        instance = kwargs.get('instance')
+        if instance and instance.role != 'conducteur':
+            for champ in [
+                'immatriculation', 'marque_vehicule', 'modele_vehicule',
+                'adresse_depart_habituelle', 'places_disponibles',
+                'heure_arrivee_habituelle', 'heure_depart_habituelle'
+            ]:
+                self.fields[champ].required = False
+
     def clean_password(self):
         return self.initial.get("password", self.instance.password)
 
@@ -91,6 +103,15 @@ class UtilisateurChangeForm(forms.ModelForm):
         if qs.exists():
             raise ValidationError("Ce numéro de téléphone est déjà utilisé.")
         return telephone
+
+    def clean(self):
+        cleaned_data = super().clean()
+        role = cleaned_data.get('role') or (self.instance and self.instance.role)
+        if role == 'conducteur':
+            for champ in ['immatriculation', 'marque_vehicule', 'modele_vehicule']:
+                if not cleaned_data.get(champ):
+                    self.add_error(champ, "Ce champ est obligatoire pour les conducteurs.")
+        return cleaned_data
 
 class ChangePasswordForm(PasswordChangeForm):
     old_password = forms.CharField(

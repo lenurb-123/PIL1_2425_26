@@ -57,18 +57,38 @@
                                     <div class="col-md-6">
                                         <label for="id_email" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="id_email" name="email" value="{{ form.email.value }}" required>
+                                        {% if form.email.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.email.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_telephone" class="form-label">Téléphone</label>
                                         <input type="tel" class="form-control" id="id_telephone" name="telephone" value="{{ form.telephone.value }}">
+                                        {% if form.telephone.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.telephone.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_prenom" class="form-label">Prénom</label>
                                         <input type="text" class="form-control" id="id_prenom" name="prenom" value="{{ form.prenom.value }}" required>
+                                        {% if form.prenom.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.prenom.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_nom" class="form-label">Nom</label>
                                         <input type="text" class="form-control" id="id_nom" name="nom" value="{{ form.nom.value }}" required>
+                                        {% if form.nom.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.nom.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_role" class="form-label">Rôle</label>
@@ -76,6 +96,11 @@
                                             <option value="conducteur" {% if form.role.value == 'conducteur' %}selected{% endif %}>Conducteur</option>
                                             <option value="passager" {% if form.role.value == 'passager' %}selected{% endif %}>Passager</option>
                                         </select>
+                                        {% if form.role.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.role.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     
                                     <!-- Champs spécifiques aux conducteurs -->
@@ -83,35 +108,75 @@
                                         <div class="col-md-6">
                                             <label for="id_immatriculation" class="form-label">Immatriculation</label>
                                             <input type="text" class="form-control" id="id_immatriculation" name="immatriculation" value="{{ form.immatriculation.value }}">
+                                            {% if form.immatriculation.errors %}
+                                                <div class="text-danger small">
+                                                    {% for error in form.immatriculation.errors %}{{ error }}<br>{% endfor %}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <div class="col-md-6">
                                             <label for="id_marque_vehicule" class="form-label">Marque du véhicule</label>
                                             <input type="text" class="form-control" id="id_marque_vehicule" name="marque_vehicule" value="{{ form.marque_vehicule.value }}">
+                                            {% if form.marque_vehicule.errors %}
+                                                <div class="text-danger small">
+                                                    {% for error in form.marque_vehicule.errors %}{{ error }}<br>{% endfor %}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <div class="col-md-6">
                                             <label for="id_modele_vehicule" class="form-label">Modèle du véhicule</label>
                                             <input type="text" class="form-control" id="id_modele_vehicule" name="modele_vehicule" value="{{ form.modele_vehicule.value }}">
+                                            {% if form.modele_vehicule.errors %}
+                                                <div class="text-danger small">
+                                                    {% for error in form.modele_vehicule.errors %}{{ error }}<br>{% endfor %}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                         <div class="col-md-6">
                                             <label for="id_places_disponibles" class="form-label">Places disponibles</label>
                                             <input type="number" class="form-control" id="id_places_disponibles" name="places_disponibles" value="{{ form.places_disponibles.value }}" min="1">
+                                            {% if form.places_disponibles.errors %}
+                                                <div class="text-danger small">
+                                                    {% for error in form.places_disponibles.errors %}{{ error }}<br>{% endfor %}
+                                                </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_heure_depart_habituelle" class="form-label">Heure de départ habituelle</label>
                                         <input type="time" class="form-control" id="id_heure_depart_habituelle" name="heure_depart_habituelle" value="{{ form.heure_depart_habituelle.value }}">
+                                        {% if form.heure_depart_habituelle.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.heure_depart_habituelle.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-md-6">
                                         <label for="id_heure_arrivee_habituelle" class="form-label">Heure d'arrivée habituelle</label>
                                         <input type="time" class="form-control" id="id_heure_arrivee_habituelle" name="heure_arrivee_habituelle" value="{{ form.heure_arrivee_habituelle.value }}">
+                                        {% if form.heure_arrivee_habituelle.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.heure_arrivee_habituelle.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-12">
                                         <label for="id_adresse_depart_habituelle" class="form-label">Adresse de départ habituelle</label>
                                         <input type="text" class="form-control" id="id_adresse_depart_habituelle" name="adresse_depart_habituelle" value="{{ form.adresse_depart_habituelle.value }}">
+                                        {% if form.adresse_depart_habituelle.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.adresse_depart_habituelle.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                     <div class="col-12">
                                         <label for="id_photo_profil" class="form-label">Photo de profil</label>
                                         <input type="file" class="form-control" id="id_photo_profil" name="photo_profil" accept="image/*">
+                                        {% if form.photo_profil.errors %}
+                                            <div class="text-danger small">
+                                                {% for error in form.photo_profil.errors %}{{ error }}<br>{% endfor %}
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="mt-4">

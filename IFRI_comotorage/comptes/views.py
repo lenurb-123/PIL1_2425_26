@@ -384,11 +384,8 @@ def discussions(request):
 @login_required
 def parametres(request):
     user = request.user
-    form = UtilisateurChangeForm(instance=user)
-    password_form = ChangePasswordForm(user)
 
     if request.method == 'POST':
-        # Gestion de la suppression de photo
         if 'delete_photo' in request.POST:
             user.photo_profil.delete(save=False)
             user.photo_profil = None
@@ -396,23 +393,34 @@ def parametres(request):
             messages.success(request, "Photo de profil supprimée.")
             return redirect('parametres')
         
-        # Gestion du changement de mot de passe
         if 'change_password' in request.POST:
             password_form = ChangePasswordForm(user, request.POST)
+            form = UtilisateurChangeForm(instance=user)  # pour garder le formulaire profil affiché
             if password_form.is_valid():
                 password_form.save()
                 messages.success(request, "Votre mot de passe a été modifié avec succès. Veuillez vous reconnecter.")
                 return redirect('connexion')
             else:
-                messages.error(request, "Erreur dans le changement de mot de passe.")
+                # Afficher toutes les erreurs du formulaire dans les messages
+                for field, errors in password_form.errors.items():
+                    for error in errors:
+                        if field == '__all__':
+                            messages.error(request, f"{error}")
+                        else:
+                            messages.error(request, f"{password_form.fields[field].label}: {error}")
         else:
-            # Gestion de la mise à jour du profil
             form = UtilisateurChangeForm(request.POST, request.FILES, instance=user)
+            password_form = ChangePasswordForm(user)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Profil mis à jour avec succès.")
                 return redirect('parametres')
-    
+            else:
+                messages.error(request, "Veuillez corriger les erreurs ci-dessous.")
+    else:
+        form = UtilisateurChangeForm(instance=user)
+        password_form = ChangePasswordForm(user)
+
     return render(request, 'comptes/parametres.html', {
         'form': form,
         'password_form': password_form,

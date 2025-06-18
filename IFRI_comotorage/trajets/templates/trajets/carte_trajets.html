@@ -89,4 +89,48 @@ setTimeout(function() {
   }
 }, 1200);
 </script>
+{% for trajet in trajets_passagers %}
+  <div class="trajet-card">
+    <div><b>Passager :</b> {{ trajet.passager.get_full_name }}</div>
+    <div><b>Départ :</b> {{ trajet.lieu_depart }}</div>
+    <div><b>Arrivée :</b> {{ trajet.lieu_arrivee }}</div>
+    <div><b>Heure :</b> {{ trajet.heure_souhaitee }}</div>
+    <div id="tarif-{{ forloop.counter0 }}" class="text-primary"></div>
+  </div>
+{% endfor %}
+<script>
+function haversine(lat1, lon1, lat2, lon2) {
+    function toRad(x) { return x * Math.PI / 180; }
+    var R = 6371;
+    var dLat = toRad(lat2 - lat1);
+    var dLon = toRad(lon2 - lon1);
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+}
+{% for trajet in trajets_passagers %}
+fetch('https://nominatim.openstreetmap.org/search?format=json&q={{ trajet.lieu_depart|urlencode }}')
+  .then(response => response.json())
+  .then(data1 => {
+    if (data1.length > 0) {
+      let lat1 = parseFloat(data1[0].lat);
+      let lon1 = parseFloat(data1[0].lon);
+      fetch('https://nominatim.openstreetmap.org/search?format=json&q={{ trajet.lieu_arrivee|urlencode }}')
+        .then(response => response.json())
+        .then(data2 => {
+          if (data2.length > 0) {
+            let lat2 = parseFloat(data2[0].lat);
+            let lon2 = parseFloat(data2[0].lon);
+            let distance = haversine(lat1, lon1, lat2, lon2);
+            let tarif = 200 + (distance * 1500);
+            document.getElementById('tarif-{{ forloop.counter0 }}').innerText =
+              'Tarif estimé : ' + Math.round(tarif) + ' FCFA (' + distance.toFixed(2) + ' km)';
+          }
+        });
+    }
+  });
+{% endfor %}
+</script>
 {% endblock %}
