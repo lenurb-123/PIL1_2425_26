@@ -1,0 +1,65 @@
+# Environnement virtuel
+venv/
+ENV/
+env/
+.venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Fichiers de logs
+*.log
+
+# Base de données SQLite locale
+*.sqlite3
+*.db
+
+# Fichiers secrets (⚠️ à ne jamais versionner)
+.env
+.env.*
+
+# Fichiers temporaires
+*.tmp
+*.temp
+*.swp
+*.bak
+*.orig
+
+# Django:
+db.sqlite3
+media/
+staticfiles/
+local_settings.py
+
+# Migrations auto-générées (si tu veux les ignorer au début)
+# attention : à ne pas faire si tu travailles en équipe
+# **/migrations/
+# !**/migrations/__init__.py
+
+# JetBrains IDEs
+.idea/
+
+# VS Code
+.vscode/
+
+# macOS / Linux / Windows fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# node / frontend tools (si tu ajoutes des outils JS)
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+
+# PyCharm test configs (optionnel)
+*.iml
+
+# PDF générés ou autres fichiers exportés
+*.pdf
+*.xlsx
+*.docx
