@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="nouvelle-conversation-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="page-title">Nouvelle conversation</h2>
+            <a href="{% url 'liste_discussions' %}" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> <span class="btn-text">Retour</span>
+            </a>
+        </div>
+
+        <div class="search-container mb-4">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="fas fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un utilisateur...">
+            </div>
+        </div>
+
+        <div class="users-list">
+            {% for utilisateur in utilisateurs %}
+                <form method="post" action="{% url 'nouvelle_conversation' %}" class="user-item">
+                    {% csrf_token %}
+                    <input type="hidden" name="destinataire" value="{{ utilisateur.id }}">
+                    <button type="submit" class="user-button">
+                        <div class="user-avatar">
+                            {% if utilisateur.photo_profil %}
+                                <img src="{{ utilisateur.photo_profil.url }}" alt="Photo de profil">
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.svg' %}" alt="Avatar par défaut">
+                            {% endif %}
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">{{ utilisateur.get_full_name }}</div>
+                            <div class="user-email">{{ utilisateur.email }}</div>
+                        </div>
+                    </button>
+                </form>
+            {% empty %}
+                <div class="no-users">
+                    <p>Aucun utilisateur disponible</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.nouvelle-conversation-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.search-container {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+    padding: 10px 0;
+}
+
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.user-item {
+    margin: 0;
+}
+
+.user-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fff;
+    transition: all 0.2s;
+    cursor: pointer;
+    text-align: left;
+}
+
+.user-button:hover {
+    background: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    margin-right: 15px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.user-email {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+@media (max-width: 576px) {
+    .nouvelle-conversation-container {
+        padding: 12px;
+        margin: -1rem;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .page-title {
+        font-size: 1.2rem;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .user-button {
+        padding: 10px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 12px;
+    }
+
+    .user-name {
+        font-size: 0.9rem;
+    }
+
+    .user-email {
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const userItems = document.querySelectorAll('.user-item');
+
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+
+        userItems.forEach(item => {
+            const userName = item.querySelector('.user-name').textContent.toLowerCase();
+            const userEmail = item.querySelector('.user-email').textContent.toLowerCase();
+
+            if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

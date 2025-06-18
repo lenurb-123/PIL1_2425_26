@@ -1,183 +1,288 @@
-{% extends 'comptes/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Mes discussions{% endblock %}
-
-{% block styles %}
-<style>
-body {
-    background: #f4f4f4;
-}
-.discussions-container {
-    max-width: 700px;
-    margin: 2.5rem auto;
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
-    padding: 2.5rem 2rem 2rem 2rem;
-}
-.discussions-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-}
-.discussions-header h4 {
-    font-weight: 700;
-    font-size: 1.3rem;
-    margin: 0;
-    color: #111;
-}
-.btn-nouveau {
-    background: #111;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 18px;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: background 0.2s;
-}
-.btn-nouveau:hover {
-    background: #2AABEE;
-}
-.discussions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-.discussion-item {
-    display: flex;
-    align-items: center;
-    background: #f8f9fa;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    padding: 14px 20px;
-    cursor: pointer;
-    transition: box-shadow 0.2s, background 0.2s, transform 0.2s;
-    position: relative;
-}
-.discussion-item:hover, .discussion-item:focus {
-    background: #e3f2fd;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-    transform: translateY(-2px) scale(1.01);
-    outline: 2px solid #2AABEE;
-}
-.avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 16px;
-    border: 2px solid #e0e0e0;
-}
-.discussion-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-}
-.discussion-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: #222;
-    margin-bottom: 2px;
-}
-.discussion-last-message {
-    color: #667781;
-    font-size: 0.97rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 250px;
-}
-.participants-list {
-    font-size: 0.92rem;
-    color: #888;
-    margin-top: 2px;
-}
-.discussion-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 6px;
-    min-width: 60px;
-}
-.discussion-date {
-    font-size: 0.85rem;
-    color: #a0a0a0;
-}
-.badge-unread {
-    background: #ff4d4f;
-    color: #fff;
-    font-size: 0.85em;
-    border-radius: 10px;
-    padding: 2px 7px;
-}
-.no-discussion {
-    text-align: center;
-    color: #888;
-    margin-top: 2rem;
-    font-size: 1.1rem;
-}
-@media (max-width: 700px) {
-    .discussions-container {
-        padding: 1.2rem 0.5rem;
-    }
-    .discussion-item {
-        padding: 10px 8px;
-    }
-    .avatar {
-        width: 36px;
-        height: 36px;
-        margin-right: 10px;
-    }
-    .discussion-title {
-        font-size: 1rem;
-    }
-}
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="discussions-container">
-    <div class="discussions-header">
-        <h4>Mes discussions</h4>
-        <a href="{% url 'nouvelle_discussion' %}" class="btn-nouveau"><i class="bi bi-plus-lg"></i> Nouveau</a>
-    </div>
-    <div class="discussions-list">
-        {% if discussions %}
-            {% for discussion in discussions %}
-                <a href="{% url 'discussion_detail' discussion.id %}" class="discussion-item">
-                    <img src="{{ discussion.avatar_url }}" alt="Avatar" class="avatar">
-                    <div class="discussion-info">
-                        <div class="discussion-title">{{ discussion.titre }}</div>
-                        <div class="discussion-last-message">{{ discussion.last_message|default:"Aucun message" }}</div>
-                        <div class="participants-list">
-                            {% if discussion.type == 'groupe' %}
-                                <i class="bi bi-people"></i>
-                                {{ discussion.participants|join:", " }}
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="discussion-meta">
-                        <span class="discussion-date">{{ discussion.last_message_date }}</span>
-                        {% if discussion.unread_count %}
-                            <span class="badge-unread">{{ discussion.unread_count }}</span>
-                        {% endif %}
-                    </div>
+<div class="container mt-4">
+    <div class="discussions-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="discussions-title">Mes discussions</h2>
+            <div class="action-buttons">
+                <a href="{% url 'nouvelle_conversation' %}" class="btn btn-primary me-2">
+                    <i class="fas fa-comment"></i> <span class="btn-text">Message</span>
                 </a>
-            {% endfor %}
+                <a href="{% url 'creer_groupe' %}" class="btn btn-primary">
+                    <i class="fas fa-users"></i> <span class="btn-text">Groupe</span>
+                </a>
+            </div>
+        </div>
+
+        {% if discussions %}
+            <div class="discussion-list">
+                {% for discussion in discussions %}
+                    <div class="discussion-item">
+                        <a href="{% url 'conversation' discussion.id %}" class="discussion-link">
+                            {% if discussion.photo %}
+                                <img src="{{ discussion.photo.url }}" alt="Photo" class="avatar">
+                            {% else %}
+                                {% if discussion.type == 'privee' %}
+                                    <img src="{% static 'images/default-avatar.svg' %}" alt="Avatar" class="avatar">
+                                {% else %}
+                                    <img src="{% static 'images/default-group.svg' %}" alt="Groupe" class="avatar">
+                                {% endif %}
+                            {% endif %}
+
+                            <div class="discussion-info">
+                                <div class="discussion-title">
+                                    {% if discussion.type == 'privee' %}
+                                        {% for participant in discussion.participants.all %}
+                                            {% if participant != user %}
+                                                {{ participant.get_full_name }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {{ discussion.nom }}
+                                    {% endif %}
+                                </div>
+
+                                {% with dernier_message=discussion.dernier_message %}
+                                    {% if dernier_message %}
+                                        <div class="discussion-last-message">
+                                            {% if dernier_message.expediteur == user %}
+                                                Vous :
+                                            {% else %}
+                                                {{ dernier_message.expediteur.prenom }} :
+                                            {% endif %}
+                                            {% if dernier_message.type == 'media' %}
+                                                {% if dernier_message.media_type == 'image' %}
+                                                    🖼️ Image
+                                                {% elif dernier_message.media_type == 'video' %}
+                                                    🎥 Vidéo
+                                                {% elif dernier_message.media_type == 'audio' %}
+                                                    🎵 Audio
+                                                {% else %}
+                                                    📎 Document
+                                                {% endif %}
+                                            {% else %}
+                                                {{ dernier_message.contenu|truncatechars:50 }}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+
+                                {% if discussion.type == 'groupe' %}
+                                    <div class="participants-list">
+                                        {{ discussion.participants.count }} participants
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="discussion-meta">
+                                <div class="discussion-date">
+                                    {% if discussion.date_modification|date:"Y-m-d" == today %}
+                                        {{ discussion.date_modification|time:"H:i" }}
+                                    {% else %}
+                                        {{ discussion.date_modification|date:"d/m/Y" }}
+                                    {% endif %}
+                                </div>
+                                {% with nb_non_lus=discussion.nombre_messages_non_lus %}
+                                    {% if nb_non_lus > 0 %}
+                                        <span class="badge-unread">{{ nb_non_lus }}</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
         {% else %}
             <div class="no-discussion">
-                <i class="bi bi-chat-dots" style="font-size:2rem;"></i><br>
-                Aucune discussion pour l'instant.
+                <p>Vous n'avez pas encore de discussions.</p>
+                <p>Commencez à discuter avec d'autres utilisateurs !</p>
             </div>
         {% endif %}
     </div>
 </div>
+
+<div id="modal-2fa-success" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="document.getElementById('modal-2fa-success').style.display='none'">&times;</span>
+    <h3>Notification</h3>
+    <p>Requête envoyée avec succès</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.discussions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.discussions-title {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.discussion-item {
+    border-bottom: 1px solid #eee;
+}
+
+.discussion-item:last-child {
+    border-bottom: none;
+}
+
+.discussion-link {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.2s;
+}
+
+.discussion-link:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+    color: inherit;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+.discussion-info {
+    flex: 1;
+    min-width: 0; /* Pour éviter le débordement du texte */
+}
+
+.discussion-title {
+    font-weight: bold;
+    margin-bottom: 3px;
+    font-size: 0.95rem;
+}
+
+.discussion-last-message {
+    color: #6c757d;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.discussion-meta {
+    text-align: right;
+    min-width: 70px;
+}
+
+.discussion-date {
+    color: #6c757d;
+    font-size: 0.75rem;
+}
+
+.badge-unread {
+    background-color: #007bff;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+.participants-list {
+    color: #6c757d;
+    font-size: 0.75rem;
+    margin-top: 2px;
+}
+
+@media (max-width: 576px) {
+    .discussions-container {
+        padding: 12px;
+        margin: -1rem;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .discussions-title {
+        font-size: 1.2rem;
+    }
+
+    .btn-text {
+        display: none;
+    }
+
+    .btn {
+        padding: 0.4rem 0.6rem;
+    }
+
+    .discussion-link {
+        padding: 10px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+
+    .discussion-title {
+        font-size: 0.9rem;
+    }
+
+    .discussion-last-message {
+        font-size: 0.8rem;
+    }
+
+    .discussion-date {
+        font-size: 0.7rem;
+    }
+
+    .badge-unread {
+        font-size: 0.7rem;
+        padding: 1px 5px;
+    }
+
+    .participants-list {
+        font-size: 0.7rem;
+    }
+}
+
+.modal {
+  display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4); justify-content: center; align-items: center;
+}
+.modal-content {
+  background: #fff; margin: 10% auto; padding: 20px; border-radius: 10px; width: 300px; text-align: center;
+}
+.close {
+  float: right; font-size: 24px; cursor: pointer;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const deuxFacteursCheckbox = document.querySelector('input[name="deux_facteurs_active"]');
+    if (deuxFacteursCheckbox) {
+        deuxFacteursCheckbox.addEventListener('change', function() {
+            // Simule l'envoi de la requête (ici, on affiche juste la modale)
+            document.getElementById('modal-2fa-success').style.display = 'block';
+        });
+    }
+});
+</script>
 {% endblock %}
