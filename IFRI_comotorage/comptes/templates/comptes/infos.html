@@ -1,0 +1,171 @@
+{% extends 'comptes/base.html' %}
+{% load socialaccount %}
+{% load static %}
+
+{% block title %}À propos - IFRI Comotorage{% endblock %}
+
+{% block styles %} 
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #ffffff;
+        --text-color: #333333;
+        --border-color: #e0e0e0;
+        --background-color: #ffffff;
+        --section-spacing: 2rem;
+    }
+
+    header {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 3rem 0;
+        text-align: center;
+        margin-bottom: var(--section-spacing);
+    }
+
+    header h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin: 0;
+        letter-spacing: 1px;
+    }
+
+    main {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    section {
+        margin-bottom: var(--section-spacing);
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--background-color);
+        transition: transform 0.2s ease;
+    }
+
+    section:hover {
+        transform: translateY(-2px);
+    }
+
+    h2 {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    p {
+        color: var(--text-color);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        color: var(--text-color);
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    .contact-info {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+    .contact-info a {
+        color: var(--secondary-color);
+        text-decoration: none;
+    }
+
+    .contact-info a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        header {
+            padding: 2rem 0;
+        }
+
+        header h1 {
+            font-size: 2rem;
+        }
+
+        section {
+            padding: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header>
+    <h1>À propos de IFRI Comotorage</h1>
+</header>
+
+<main>
+    <section>
+        <h2>Notre Service</h2>
+        <p>IFRI Comotorage est une plateforme de covoiturage dédiée aux étudiants d'IFRI, facilitant le partage de trajets entre conducteurs et passagers.</p>
+    </section>
+
+    <section>
+        <h2>Fonctionnalités Principales</h2>
+        <ul>
+            <li>Publication de trajets</li>
+            <li>Recherche de trajets</li>
+            <li>Matching entre conducteurs et passagers</li>
+            <li>Messagerie intégrée</li>
+            <li>Système de notation</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Contact</h2>
+        <p>Pour toute question ou assistance, n'hésitez pas à nous contacter :</p>
+        <div class="contact-info">
+            <p>Email : ifri@comotorage.com</p>
+            <p>Support : support@comotorage.com</p>
+        </div>
+    </section>
+
+    <section>
+        <h2>Mentions Légales</h2>
+        <p>Ce site est un projet de démonstration. Les informations fournies sont à titre d'exemple uniquement.</p>
+    </section>
+
+    <section>
+        <h2>Politique de Confidentialité</h2>
+        <p>Nous respectons votre vie privée. Vos données personnelles ne seront pas partagées avec des tiers sans votre consentement.</p>
+    </section>
+
+    <section>
+        <h2>Notre Engagement</h2>
+        <p>Nous nous engageons à offrir un service de qualité, sécurisé et respectueux de l'environnement, en facilitant le partage de trajets entre étudiants.</p>
+    </section>
+
+    <section>
+        <h2>Impact Environnemental</h2>
+        <p>En encourageant le covoiturage, nous contribuons à réduire l'empreinte carbone des trajets quotidiens des étudiants.</p>
+    </section>
+</main>
+{% endblock %}
+</body>
+
+
+</html>

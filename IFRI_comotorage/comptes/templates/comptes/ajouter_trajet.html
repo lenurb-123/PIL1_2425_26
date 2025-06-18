@@ -1,0 +1,283 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Ajouter un trajet - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #ffffff;
+        --border-color: #e0e0e0;
+        --text-color: #333333;
+        --hover-color: #333333;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        --transition: all 0.3s ease;
+    }
+
+    .trajet-form-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .trajet-form-card {
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+    }
+
+    .form-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .form-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        z-index: 2;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 3rem;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        color: var(--text-color);
+        transition: var(--transition);
+        background: var(--secondary-color);
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+        position: absolute;
+        left: 3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+        transition: var(--transition);
+        pointer-events: none;
+        font-size: 0.9rem;
+    }
+
+    .form-control:focus + .form-label,
+    .form-control:not(:placeholder-shown) + .form-label {
+        top: 0;
+        left: 1rem;
+        font-size: 0.8rem;
+        background: var(--secondary-color);
+        padding: 0 0.5rem;
+        color: var(--primary-color);
+    }
+
+    .map-container {
+        margin: 1.5rem 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    #map {
+        width: 100%;
+        height: 300px;
+        background: #f8f8f8;
+    }
+
+    .map-label {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .autocomplete-suggestions {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--secondary-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        margin-top: 0.5rem;
+        box-shadow: var(--shadow);
+        z-index: 1000;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .suggestion-item {
+        padding: 0.75rem 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .suggestion-item:hover {
+        background: #f8f8f8;
+    }
+
+    .submit-btn {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        border-radius: 8px;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: var(--transition);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    .submit-btn:hover {
+        background: var(--hover-color);
+        transform: translateY(-2px);
+    }
+
+    .submit-btn i {
+        font-size: 1.2rem;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .trajet-form-card {
+            padding: 1.5rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+        }
+
+        #map {
+            height: 250px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="trajet-form-container">
+    <div class="trajet-form-card">
+        <h1 class="form-title">Ajouter un trajet</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <i class="fas fa-map-marker-alt form-icon"></i>
+                {{ form.lieu_depart }}
+                <label class="form-label" for="lieu_depart_autocomplete">Lieu de départ</label>
+                <div class="autocomplete-suggestions" id="suggestions-depart" style="display:none;"></div>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-map-marker-alt form-icon"></i>
+                {{ form.lieu_arrivee }}
+                <label class="form-label" for="lieu_arrivee_autocomplete">Lieu d'arrivée</label>
+                <div class="autocomplete-suggestions" id="suggestions-arrivee" style="display:none;"></div>
+            </div>
+
+            <div class="map-label">Visualisation du trajet :</div>
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-clock form-icon"></i>
+                {{ form.heure_depart }}
+                <label class="form-label" for="id_heure_depart">Heure de départ</label>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-users form-icon"></i>
+                {{ form.places_disponibles }}
+                <label class="form-label" for="id_places_disponibles">Places disponibles</label>
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-calendar-alt form-icon"></i>
+                {{ form.jours }}
+                <label class="form-label" for="id_jours">Jours de disponibilité</label>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i>
+                Publier le trajet
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animation des labels flottants
+    const formControls = document.querySelectorAll('.form-control');
+    formControls.forEach(control => {
+        if (control.value) {
+            control.nextElementSibling.classList.add('active');
+        }
+    });
+
+    // Gestion de l'autocomplétion
+    const autocompleteInputs = document.querySelectorAll('[id$="_autocomplete"]');
+    autocompleteInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const suggestionsId = this.id === 'lieu_depart_autocomplete' ? 'suggestions-depart' : 'suggestions-arrivee';
+            const suggestions = document.getElementById(suggestionsId);
+            
+            if (this.value.length > 2) {
+                // Ici, vous pouvez ajouter votre logique d'autocomplétion
+                suggestions.style.display = 'block';
+            } else {
+                suggestions.style.display = 'none';
+            }
+        });
+    });
+
+    // Fermeture des suggestions lors du clic en dehors
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.form-group')) {
+            document.querySelectorAll('.autocomplete-suggestions').forEach(suggestions => {
+                suggestions.style.display = 'none';
+            });
+        }
+    });
+});
+</script>
+{% endblock %} 

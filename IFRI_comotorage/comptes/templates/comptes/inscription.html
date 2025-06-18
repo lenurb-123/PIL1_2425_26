@@ -1,0 +1,286 @@
+{% extends 'comptes/base.html' %}
+{% load socialaccount %}
+{% load static %}
+<meta charset="UTF-8">
+{% block title %}Inscription - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    .auth-container {
+        max-width: 450px;
+        margin: 2rem auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-logo {
+        width: 60px;
+        height: 60px;
+        background: #000;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 500;
+        color: #000;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fa;
+    }
+
+    .form-control:focus {
+        border-color: #000;
+        background: #fff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+    }
+
+    .form-row {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+        margin-bottom: 0;
+    }
+
+    .btn-auth {
+        width: 100%;
+        padding: 1rem;
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-auth:hover {
+        background: #333;
+    }
+
+    .form-text {
+        color: #666;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    .alert-error {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .role-selector {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .role-option {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .role-option.selected {
+        border-color: #000;
+        background: #f8f9fa;
+    }
+
+    .role-option i {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .role-option.selected i {
+        color: #000;
+    }
+
+    .conducteur-fields {
+        display: none;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .conducteur-fields.active {
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <div class="auth-logo">
+            <i class="bi bi-car-front"></i>
+        </div>
+        <h1 class="auth-title">Créer un compte</h1>
+        <p class="auth-subtitle">Rejoignez la communauté IFRI Comotorage</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'inscription' %}" class="needs-validation" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label for="prenom" class="form-label">Prénom</label>
+                <input type="text" class="form-control" id="prenom" name="prenom" required>
+            </div>
+            <div class="form-group">
+                <label for="nom" class="form-label">Nom</label>
+                <input type="text" class="form-control" id="nom" name="nom" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+            <div class="form-text">Utilisez votre adresse email IFRI (@ifri-education.com)</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password_confirm" class="form-label">Confirmer le mot de passe</label>
+            <input type="password" class="form-control" id="password_confirm" name="password_confirm" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Je suis un</label>
+            <div class="role-selector">
+                <div class="role-option" data-role="conducteur">
+                    <i class="bi bi-car-front"></i>
+                    <div>Conducteur</div>
+                </div>
+                <div class="role-option" data-role="passager">
+                    <i class="bi bi-person"></i>
+                    <div>Passager</div>
+                </div>
+            </div>
+            <input type="hidden" name="role" id="role" required>
+        </div>
+
+        <div id="conducteur-fields" class="conducteur-fields">
+            <div class="form-group">
+                <label for="immatriculation" class="form-label">Numéro d'immatriculation</label>
+                <input type="text" class="form-control" id="immatriculation" name="immatriculation" pattern="[A-Z0-9]{2,3}-[A-Z0-9]{2,3}-[A-Z0-9]{2,3}" placeholder="Ex: AB-123-CD">
+                <div class="form-text">Format: XX-XXX-XX (lettres et chiffres)</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="telephone" class="form-label">Téléphone</label>
+            <input type="tel" class="form-control" id="telephone" name="telephone" required>
+        </div>
+
+        <button type="submit" class="btn-auth">Créer mon compte</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleOptions = document.querySelectorAll('.role-option');
+    const roleInput = document.getElementById('role');
+    const conducteurFields = document.getElementById('conducteur-fields');
+
+    roleOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            // Remove selected class from all options
+            roleOptions.forEach(opt => opt.classList.remove('selected'));
+            // Add selected class to clicked option
+            this.classList.add('selected');
+            // Update hidden input
+            roleInput.value = this.dataset.role;
+            // Show/hide conducteur fields
+            if (this.dataset.role === 'conducteur') {
+                conducteurFields.classList.add('active');
+            } else {
+                conducteurFields.classList.remove('active');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

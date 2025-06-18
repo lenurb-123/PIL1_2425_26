@@ -1,0 +1,264 @@
+{% extends 'comptes/base.html' %}
+{% load socialaccount %}
+{% load static %}
+
+{% block title %}Connexion - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    .auth-container {
+        max-width: 400px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .auth-logo {
+        width: 60px;
+        height: 60px;
+        background: #000;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #000;
+        margin-bottom: 0.5rem;
+    }
+
+    .auth-subtitle {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 500;
+        color: #000;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+        outline: none;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .form-check-input {
+        margin-right: 0.5rem;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .btn-auth {
+        width: 100%;
+        padding: 0.875rem;
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-auth:hover {
+        background: #333;
+    }
+
+    .auth-divider {
+        text-align: center;
+        margin: 1.5rem 0;
+        position: relative;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        width: 45%;
+        height: 1px;
+        background: #ddd;
+    }
+
+    .auth-divider::before {
+        left: 0;
+    }
+
+    .auth-divider::after {
+        right: 0;
+    }
+
+    .auth-divider span {
+        background: white;
+        padding: 0 1rem;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .social-auth {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .social-btn {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        background: white;
+        color: #000;
+        text-decoration: none;
+    }
+
+    .social-btn:hover {
+        background: #f8f9fa;
+        border-color: #000;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .auth-link {
+        color: #000;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .auth-link:hover {
+        color: #333;
+    }
+
+    .alert {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-danger {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .alert-success {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    @media (max-width: 480px) {
+        .auth-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-header">
+        <div class="auth-logo">
+            <i class="bi bi-car-front"></i>
+        </div>
+        <h1 class="auth-title">Connexion</h1>
+        <p class="auth-subtitle">Bienvenue sur IFRI Comotorage</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'connexion' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre email" required>
+        </div>
+        <div class="form-group">
+            <label for="password" class="form-label">Mot de passe</label>
+            <input type="password" class="form-control" id="password" name="mot_de_passe" placeholder="Entrez votre mot de passe" required>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+            <label class="form-check-label" for="remember">Se souvenir de moi</label>
+        </div>
+        <button type="submit" class="btn-auth">Se connecter</button>
+    </form>
+
+    <div class="auth-divider">
+        <span>ou</span>
+    </div>
+
+    <div class="social-auth">
+        <a href="#" class="social-btn">
+            <i class="bi bi-google"></i>
+            Google
+        </a>
+        <a href="#" class="social-btn">
+            <i class="bi bi-facebook"></i>
+            Facebook
+        </a>
+    </div>
+
+    <div class="auth-footer">
+        <p>Pas encore de compte ? <a href="{% url 'inscription' %}" class="auth-link">S'inscrire</a></p>
+        <p><a href="{% url 'password_reset' %}" class="auth-link">Mot de passe oublié ?</a></p>
+    </div>
+</div>
+{% endblock %}

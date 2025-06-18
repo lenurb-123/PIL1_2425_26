@@ -1,0 +1,152 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Discussions - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+body {
+    background: #f4f4f4;
+}
+.discussions-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+    padding: 1.5rem 0.5rem;
+}
+h2 {
+    color: #111;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+.discussion-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.discussion-item {
+    border-bottom: 1px solid #eee;
+}
+.discussion-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.7rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 10px;
+    text-decoration: none;
+}
+.discussion-link:hover {
+    background: #f0f4fa;
+}
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eaeaea;
+    flex-shrink: 0;
+}
+.discussion-info {
+    flex: 1;
+    min-width: 0;
+}
+.discussion-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #222;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.discussion-last-message {
+    color: #667781;
+    font-size: 0.97rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+}
+.discussion-meta {
+    text-align: right;
+    min-width: 60px;
+}
+.discussion-date {
+    font-size: 0.85rem;
+    color: #a0a0a0;
+}
+.badge-unread {
+    background: #2AABEE;
+    color: #fff;
+    font-size: 0.85em;
+    border-radius: 10px;
+    padding: 2px 7px;
+    margin-top: 4px;
+    display: inline-block;
+}
+.no-discussion {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+}
+@media (max-width: 700px) {
+    .discussions-container {
+        padding: 0.7rem 0.1rem;
+    }
+    .discussion-link {
+        padding: 0.7rem 0.2rem;
+    }
+    .avatar {
+        width: 38px;
+        height: 38px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="discussions-container">
+    <h2>Mes discussions</h2>
+    {% if discussions %}
+        <ul class="discussion-list">
+            {% for discussion in discussions %}
+                <li class="discussion-item">
+                    <a href="{% url 'historique_discussion' discussion.id %}" class="discussion-link">
+                        <img src="{% if discussion.photo %}{{ discussion.photo.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}" class="avatar" alt="Avatar">
+                        <div class="discussion-info">
+                            <div class="discussion-title">
+                                {{ discussion.nom|default:"Privée" }}
+                            </div>
+                            <div class="discussion-last-message">
+                                {% if discussion.dernier_message %}
+                                    {{ discussion.dernier_message.contenu|truncatechars:40 }}
+                                {% else %}
+                                    Aucun message
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="discussion-meta">
+                            {% if discussion.dernier_message %}
+                                <span class="discussion-date">{{ discussion.dernier_message.date_envoi|date:'H:i' }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-discussion">Vous n'avez pas encore de discussions actives.</p>
+        <a href="{% url 'nouvelle_discussion' %}" class="btn btn-primary" style="margin-top:1rem;">
+            + Nouvelle discussion
+        </a>
+    {% endif %}
+</div>
+{% endblock %} 

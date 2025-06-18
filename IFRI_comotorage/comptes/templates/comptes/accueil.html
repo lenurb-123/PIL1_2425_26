@@ -1,0 +1,811 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Accueil - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: linear-gradient(135deg,rgb(255,255 ,255) 0%,rgb(255, 255, 255) 100%);
+        color: #000000;
+        font-family: 'Poppins', sans-serif;
+    }
+    .hero-section {
+        background: linear-gradient(120deg,rgb(112,113,115),rgb(112,113,115) 70%);
+        color: #fff;
+        padding: 4rem 0 2rem 0;
+        border-radius: 0 0 32px 32px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        margin-top: -1.5rem;
+        min-height: 60vh;
+        display: flex;
+        align-items: center;
+    }
+    .hero-content {
+        z-index: 2;
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    .hero-title {
+        font-size: 2.8rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+        letter-spacing: -1px;
+    }
+    .hero-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+    }
+    .hero-illustration {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 320px;
+        max-width: 60vw;
+      
+        z-index: 1;
+        pointer-events: none;
+    }
+    .search-box {
+        background: #2AABEE;
+        padding: 2rem 1rem;
+        border-radius: 18px;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.12);
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    .search-box .form-control {
+        border: none;
+        padding: 1rem 1.2rem;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        background: #229ED9;
+        color: #fff;
+    }
+    .search-box .form-control:focus {
+        border: 2px solid #2AABEE;
+        background:#2AABEE;
+        color: #fff;
+        box-shadow: none;
+    }
+    .search-box .btn {
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 600;
+        background: #229ED9;
+        color: # fff;
+        border: none;
+        font-size: 1.1rem;
+        transition: background 0.2s;
+    }
+    
+    .how-section {
+        background: linear-gradient(120deg,rgb(82, 81, 81),rgb(40, 39, 39));
+        border-radius: 20px;
+        color: #fff;
+        margin: 2rem 0;
+        padding: 2.5rem 1rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    }
+    .how-steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        margin-top: 2rem;
+        color: black;
+    }
+   
+    .how-step {
+        background: linear-gradient(120deg,rgb(242, 242, 242),rgb(242, 242, 242));
+        border-radius: 16px;
+        padding: 1.5rem 1rem;
+        flex: 1 1 180px;
+        min-width: 180px;
+        max-width: 220px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .how-step i {
+        font-size: 2.2rem;
+        color: #2AABEE;
+        margin-bottom: 0.7rem;
+    }
+    .how-step-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    .how-step-desc {
+        font-size: 0.98rem;
+        color: #000000;
+        opacity: 0.85;
+    }
+    .features-section {
+        background: linear-gradient(120deg,rgb(82, 81, 81),rgb(40, 39, 39));
+        border-radius: 20px;
+        color:white;
+        margin: 2rem 0;
+        font-weight:bold;
+        padding: 2.5rem 1rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+    }
+    .feature-card {
+        background: linear-gradient(120deg,rgb(229, 226, 226),rgb(244, 237, 237));
+        color: black;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        text-align: center;
+        padding: 2rem 1rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 6px 24px rgba(42,171,238,0.10);
+    }
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        background: #2AABEE;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.2rem;
+        font-size: 2rem;
+        box-shadow: 0 2px 8px rgba(42,171,238,0.10);
+    }
+    .feature-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+    }
+    .feature-text {
+        color: #b0b0b0;
+        font-size: 1rem;
+    }
+    .cta-section {
+        background: linear-gradient(120deg,rgb(112,113,115),rgb(112,113,115) 70%);
+        color: #fff;
+        padding: 3rem 0;
+        text-align: center;
+        border-radius: 20px;
+        margin-top: 2rem;
+        box-shadow: 0 2px 16px rgba(42,171,238,0.10);
+    }
+    .cta-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+    }
+    .cta-text {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .cta-btn {
+        padding: 1rem 2.2rem;
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        background: #fff;
+        color: #2AABEE;
+        border: none;
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+        margin-bottom: 0.5rem;
+    }
+    .cta-btn-primary {
+        background:rgb(242,242,242)
+        color: #fff;
+    }
+    .local-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 3rem 3rem;
+        background: linear-gradient(120deg,rgb(112,113,115),rgb(112,113,115) 70%);
+        border-radius: 20px;
+        color: #fff;
+        margin: 2rem 0;
+        text-align: justify;
+        font-weight:600;
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .cta-btn-primary:hover {
+        background: rgb(242,242,242)
+        color: #2AABEE;
+        transform: translateY(-2px) scale(1.03);
+    }
+    .cta-btn-outline {
+        background: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+    }
+    .cta-btn-outline:hover {
+        background: #fff;
+        color: #2AABEE;
+        transform: translateY(-2px) scale(1.03);
+    }
+    .testimonials-section {
+       background: linear-gradient(120deg,rgb(112,113,115),rgb(112,113,115) 70%);
+        border-radius: 20px;
+        margin: 2rem 0;
+        padding: 2.5rem 1rem;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+        color:#fff;
+    }
+    .testimonial-card {
+        background: linear-gradient(120deg,rgb(242,242,242),rgb(242,242,242,0.4));
+        color:black;
+        border-radius: 16px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        padding: 2rem 1rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .testimonial-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 6px 24px rgba(42,171,238,0.10);
+    }
+    .testimonial-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+    }
+    .testimonial-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #2AABEE;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.3rem;
+        color: #fff;
+    }
+    .testimonial-info h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: black;
+    }
+    .testimonial-info p {
+        margin: 0;
+        color: #000000;
+        font-size: 0.95rem;
+        font-weight:600;
+    }
+    .testimonial-text {
+        color:rgb(37, 35, 35);
+        line-height: 1.6;
+        font-style: italic;
+        font-size: 1.05rem;
+        font-weight:600;
+    }
+    /* Footer modernisé */
+    .footer {
+        background: #181818;
+        padding: 1.5rem 0 0.5rem 0;
+        margin-top: auto;
+        color: #000000;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+        border-radius: 24px 24px 0 0;
+    }
+    .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2rem;
+    }
+    .footer-links {
+        display: flex;
+        gap: 2rem;
+    }
+    .footer-link {
+        color: #000000;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: color 0.2s;
+    }
+    .footer-link:hover {
+        color: #2AABEE;
+    }
+    .footer-social {
+        display: flex;
+        gap: 1rem;
+    }
+    .social-link {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #232526;
+        color: #2AABEE;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s, color 0.2s;
+    }
+    .social-link:hover {
+        background: #2AABEE;
+        color: #black;
+        transform: translateY(-3px);
+    }
+    /* Responsive */
+    @media (max-width: 991.98px) {
+        .how-steps, .cta-buttons {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .feature-card, .testimonial-card {
+            margin-bottom: 1.5rem;
+        }
+        .local-section {
+            padding: 2rem 2rem;
+        }
+        .l-title {
+            font-size: 1.8rem;
+        }
+        .l-text {
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 767.98px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        .hero-section {
+            padding: 2.5rem 0 1rem 0;
+            min-height: 40vh;
+        }
+        .search-box {
+            padding: 1rem 0.5rem;
+        }
+        .how-section, .features-section, .testimonials-section, .cta-section {
+            padding: 1.2rem 0.5rem;
+        }
+        .footer-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .local-section {
+            padding: 1.5rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .l-title {
+            font-size: 1.5rem;
+        }
+        .l-text {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .hero-title {
+            font-size: 1.3rem;
+        }
+        .hero-section {
+            padding: 1.2rem 0 0.5rem 0;
+        }
+        .feature-card, .testimonial-card {
+            padding: 1rem 0.5rem;
+        }
+        .how-step {
+            padding: 1rem 0.5rem;
+        }
+        .cta-title {
+            font-size: 1.2rem;
+        }
+        .local-section {
+            padding: 1rem 1rem;
+            border-radius: 15px;
+        }
+        .l-title {
+            font-size: 1.3rem;
+        }
+        .l-text {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+    }
+    .last-section p{
+    
+             color: #000000;
+             text-align:center;
+             font-size:1rem;
+             font-style: italic;
+    }
+    .last-section span{
+        color: #000000;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Comotorage intelligent pour la communauté IFRI</h1>
+            <p class="hero-subtitle">Partagez vos trajets, économisez et discutez avec vos proches en toute sécurité et confidentialité</p>
+            <div class="search-box">
+                <form action="{% url 'rechercher_trajet' %}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <select class="form-control" name="depart" required>
+                            <option value="">Départ</option>
+                            <optgroup label="Littoral">
+                                <option value="Cotonou">Cotonou</option>
+                            </optgroup>
+                            <optgroup label="Ouémé">
+                                <option value="Porto-Novo">Porto-Novo</option>
+                                <option value="Adjara">Adjara</option>
+                                <option value="Avrankou">Avrankou</option>
+                                <option value="Dangbo">Dangbo</option>
+                                <option value="Sèmè-Kpodji">Sèmè-Kpodji</option>
+                            </optgroup>
+                            <optgroup label="Atlantique">
+                                <option value="Ouidah">Ouidah</option>
+                                <option value="Allada">Allada</option>
+                                <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                <option value="Toffo">Toffo</option>
+                                <option value="Zè">Zè</option>
+                                <option value="So-Ava">So-Ava</option>
+                            </optgroup>
+                            <optgroup label="Mono">
+                                <option value="Lokossa">Lokossa</option>
+                                <option value="Comè">Comè</option>
+                                <option value="Athieme">Athieme</option>
+                                <option value="Bopa">Bopa</option>
+                                <option value="Grand-Popo">Grand-Popo</option>
+                                <option value="Houéyogbé">Houéyogbé</option>
+                            </optgroup>
+                            <optgroup label="Couffo">
+                                <option value="Aplahoué">Aplahoué</option>
+                                <option value="Djakotomey">Djakotomey</option>
+                                <option value="Klouékanmè">Klouékanmè</option>
+                                <option value="Lalo">Lalo</option>
+                                <option value="Toviklin">Toviklin</option>
+                            </optgroup>
+                            <optgroup label="Zou">
+                                <option value="Abomey">Abomey</option>
+                                <option value="Bohicon">Bohicon</option>
+                                <option value="Covè">Covè</option>
+                                <option value="Djidja">Djidja</option>
+                                <option value="Ouinhi">Ouinhi</option>
+                                <option value="Za-Kpota">Za-Kpota</option>
+                                <option value="Zangnanado">Zangnanado</option>
+                            </optgroup>
+                            <optgroup label="Plateau">
+                                <option value="Sakété">Sakété</option>
+                                <option value="Adja-Ouèrè">Adja-Ouèrè</option>
+                                <option value="Ifangni">Ifangni</option>
+                                <option value="Kétou">Kétou</option>
+                                <option value="Pobè">Pobè</option>
+                            </optgroup>
+                            <optgroup label="Collines">
+                                <option value="Savè">Savè</option>
+                                <option value="Bantè">Bantè</option>
+                                <option value="Dassa-Zoumè">Dassa-Zoumè</option>
+                                <option value="Glazoué">Glazoué</option>
+                                <option value="Ouèssè">Ouèssè</option>
+                                <option value="Savalou">Savalou</option>
+                            </optgroup>
+                            <optgroup label="Borgou">
+                                <option value="Parakou">Parakou</option>
+                                <option value="Bembèrèkè">Bembèrèkè</option>
+                                <option value="Kalalè">Kalalè</option>
+                                <option value="N'Dali">N'Dali</option>
+                                <option value="Nikki">Nikki</option>
+                                <option value="Pèrèrè">Pèrèrè</option>
+                                <option value="Sinendé">Sinendé</option>
+                                <option value="Tchaourou">Tchaourou</option>
+                            </optgroup>
+                            <optgroup label="Alibori">
+                                <option value="Kandi">Kandi</option>
+                                <option value="Banikoara">Banikoara</option>
+                                <option value="Gogounou">Gogounou</option>
+                                <option value="Kérou">Kérou</option>
+                                <option value="Malanville">Malanville</option>
+                                <option value="Ségbana">Ségbana</option>
+                            </optgroup>
+                            <optgroup label="Atacora">
+                                <option value="Natitingou">Natitingou</option>
+                                <option value="Boukoumbè">Boukoumbè</option>
+                                <option value="Cobly">Cobly</option>
+                                <option value="Kérou">Kérou</option>
+                                <option value="Kouandé">Kouandé</option>
+                                <option value="Matéri">Matéri</option>
+                                <option value="Pehonko">Pehonko</option>
+                                <option value="Tanguiéta">Tanguiéta</option>
+                                <option value="Toucountouna">Toucountouna</option>
+                            </optgroup>
+                            <optgroup label="Donga">
+                                <option value="Djougou">Djougou</option>
+                                <option value="Bassila">Bassila</option>
+                                <option value="Copargo">Copargo</option>
+                                <option value="Ouaké">Ouaké</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-control" name="arrivee" required>
+                            <option value="">Arrivée</option>
+                            <option value="">Départ</option>
+                            
+                                <option value="Campus">Cotonou</option>
+
+                            <optgroup label="Ouémé">
+                                <option value="Porto-Novo">Porto-Novo</option>
+                                <option value="Adjara">Adjara</option>
+                                <option value="Avrankou">Avrankou</option>
+                                <option value="Dangbo">Dangbo</option>
+                                <option value="Sèmè-Kpodji">Sèmè-Kpodji</option>
+                            </optgroup>
+                            <optgroup label="Atlantique">
+                                <option value="Ouidah">Ouidah</option>
+                                <option value="Allada">Allada</option>
+                                <option value="Abomey-Calavi">Abomey-Calavi</option>
+                                <option value="Toffo">Toffo</option>
+                                <option value="Zè">Zè</option>
+                                <option value="So-Ava">So-Ava</option>
+                            </optgroup>
+                            <optgroup label="Mono">
+                                <option value="Lokossa">Lokossa</option>
+                                <option value="Comè">Comè</option>
+                                <option value="Athieme">Athieme</option>
+                                <option value="Bopa">Bopa</option>
+                                <option value="Grand-Popo">Grand-Popo</option>
+                                <option value="Houéyogbé">Houéyogbé</option>
+                            </optgroup>
+                            <optgroup label="Couffo">
+                                <option value="Aplahoué">Aplahoué</option>
+                                <option value="Djakotomey">Djakotomey</option>
+                                <option value="Klouékanmè">Klouékanmè</option>
+                                <option value="Lalo">Lalo</option>
+                                <option value="Toviklin">Toviklin</option>
+                            </optgroup>
+                            <optgroup label="Zou">
+                                <option value="Abomey">Abomey</option>
+                                <option value="Bohicon">Bohicon</option>
+                                <option value="Covè">Covè</option>
+                                <option value="Djidja">Djidja</option>
+                                <option value="Ouinhi">Ouinhi</option>
+                                <option value="Za-Kpota">Za-Kpota</option>
+                                <option value="Zangnanado">Zangnanado</option>
+                            </optgroup>
+                            <optgroup label="Plateau">
+                                <option value="Sakété">Sakété</option>
+                                <option value="Adja-Ouèrè">Adja-Ouèrè</option>
+                                <option value="Ifangni">Ifangni</option>
+                                <option value="Kétou">Kétou</option>
+                                <option value="Pobè">Pobè</option>
+                            </optgroup>
+                            <optgroup label="Collines">
+                                <option value="Savè">Savè</option>
+                                <option value="Bantè">Bantè</option>
+                                <option value="Dassa-Zoumè">Dassa-Zoumè</option>
+                                <option value="Glazoué">Glazoué</option>
+                                <option value="Ouèssè">Ouèssè</option>
+                                <option value="Savalou">Savalou</option>
+                            </optgroup>
+                            <optgroup label="Borgou">
+                                <option value="Parakou">Parakou</option>
+                                <option value="Bembèrèkè">Bembèrèkè</option>
+                                <option value="Kalalè">Kalalè</option>
+                                <option value="N'Dali">N'Dali</option>
+                                <option value="Nikki">Nikki</option>
+                                <option value="Pèrèrè">Pèrèrè</option>
+                                <option value="Sinendé">Sinendé</option>
+                                <option value="Tchaourou">Tchaourou</option>
+                            </optgroup>
+                            <optgroup label="Alibori">
+                                <option value="Kandi">Kandi</option>
+                                <option value="Banikoara">Banikoara</option>
+                                <option value="Gogounou">Gogounou</option>
+                                <option value="Kérou">Kérou</option>
+                                <option value="Malanville">Malanville</option>
+                                <option value="Ségbana">Ségbana</option>
+                            </optgroup>
+                            <optgroup label="Atacora">
+                                <option value="Natitingou">Natitingou</option>
+                                <option value="Boukoumbè">Boukoumbè</option>
+                                <option value="Cobly">Cobly</option>
+                                <option value="Kérou">Kérou</option>
+                                <option value="Kouandé">Kouandé</option>
+                                <option value="Matéri">Matéri</option>
+                                <option value="Pehonko">Pehonko</option>
+                                <option value="Tanguiéta">Tanguiéta</option>
+                                <option value="Toucountouna">Toucountouna</option>
+                            </optgroup>
+                            <optgroup label="Donga">
+                                <option value="Djougou">Djougou</option>
+                                <option value="Bassila">Bassila</option>
+                                <option value="Copargo">Copargo</option>
+                                <option value="Ouaké">Ouaké</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="bi bi-search"></i> Rechercher
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Hero Illustration" class="hero-illustration d-none d-md-block">
+    </div>
+</section>
+
+<section class="how-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Comment ça marche ?</h2>
+            <p>En 3 étapes simples, trouvez ou proposez un trajet</p>
+        </div>
+        <div class="how-steps">
+            <div class="how-step">
+                <i class="bi bi-search"></i>
+                <div class="how-step-title">Recherchez un trajet</div>
+                <div class="how-step-desc">Entrez votre point de départ et d'arrivée pour voir les trajets disponibles.</div>
+            </div>
+            <div class="how-step">
+                <i class="bi bi-plus-circle"></i>
+                <div class="how-step-title">Publiez votre trajet</div>
+                <div class="how-step-desc">Proposez un trajet en tant que conducteur ou passager en quelques clics.</div>
+            </div>
+            <div class="how-step">
+                <i class="bi bi-chat-dots"></i>
+                <div class="how-step-title">Contactez & partagez</div>
+                <div class="how-step-desc">Discutez, partagez votre position et voyagez en toute sécurité.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="features-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Pourquoi choisir IFRI Comotorage ?</h2>
+            <p>Une solution de comotorage adaptée à la communauté IFRI</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="feature-title">Communauté de confiance</h3>
+                    <p class="feature-text">Voyagez avec des membres vérifiés de la communauté IFRI</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-minus"></i>
+                    </div>
+                    <h3 class="feature-title">Économique</h3>
+                    <p class="feature-text">Partagez les frais de transport et réduisez vos dépenses</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                       
+                    <i class="bi bi-chat-square-text"></i>
+
+                    </div>
+                    <h3 class="feature-title">Sécurité et Discussions</h3>
+                    <p class="feature-text">Discutez avec vos proches en sécurité et sans factures. Vos données sont gérer de manière confidantielle. Nous sommes la communauté IFRI</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="local-section">
+    <div class="l-container">
+        <h2 class="l-title">Votre sécurité, notre priorité</h2>
+        <p class="l-text">Le partage de position en temps réel permet à vos proches de vous suivre pendant votre trajet. En
+             cas d'imprévu, ils savent exactement où vous êtes. C'est votre filet de sécurité numérique.. </p>
+        <h2 class="l-title">Simplifiez vos rendez-vous</h2>
+        <p class="l-text">Avec la localisation partagée, votre covoitureur sait 
+            exactement quand vous arriverez au point de rendez-vous. </p>
+        <h2 class="l-title">Partagez vos positions en temps réel avec vos amis</h2>
+        <p class="l-text">Soyez plus proche de vos amis . </p>
+    </div>
+      
+</section>
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">Prêt à commencer ?</h2>
+        <p class="cta-text">Rejoignez la communauté IFRI Comotorage et commencez à partager vos trajets dès aujourd'hui</p>
+        <div class="cta-buttons">
+            <a href="{% url 'inscription' %}" class="btn cta-btn cta-btn-primary">S'inscrire</a>
+            <a href="{% url 'rechercher_trajet' %}" class="btn cta-btn cta-btn-outline">Rechercher un trajet</a>
+        </div>
+    </div>
+</section>
+
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Ce qu'en disent nos utilisateurs</h2>
+            <p>Découvrez les expériences de la communauté</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">VD</div>
+                        <div class="testimonial-info">
+                            <h4>Vischenzisch Debben</h4>
+                            <p>Étudiant IFRI</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"IFRI Comotorage m'a permis de réduire considérablement mes frais de transport tout en rencontrant des personnes intéressantes."</p>
+                    
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">MC</div>
+                        <div class="testimonial-info">
+                            <h4>Marie Claire</h4>
+                            <p>Enseignante IFRI</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"Une solution pratique et écologique pour mes déplacements quotidiens. L'interface est intuitive et la communauté est très agréable."</p>
+                    
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">DJ</div>
+                        <div class="testimonial-info">
+                            <h4>David Jean</h4>
+                            <p>Administratif IFRI</p>
+                        </div>
+                    </div>
+                    <p class="testimonial-text">"Je recommande vivement cette plateforme à tous les membres de l'IFRI. C'est un excellent moyen de voyager de manière responsable."</p>
+                    <div class="testimonial-rating">
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="last-section">
+    <div >
+       
+        <p >Nous sommes à votre service 7jours sur 7.</p>
+        <p> <span>IFRI_Comotorage </span>  vous remerçie pour votre fidélité</p>
+    </div >  
+</section>        
+{% endblock %} 

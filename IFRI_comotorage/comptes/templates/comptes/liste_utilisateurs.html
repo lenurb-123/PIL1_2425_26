@@ -1,0 +1,157 @@
+{% extends 'comptes/base.html' %}
+{% block styles %}
+<style>
+.discussion-list-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    padding-top:0px;
+    background-color: rgb(77, 77, 77);
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+   
+    border-radius:5px;
+}
+
+.titre-section {
+    text-align: center;
+    color:#f1f1f1;
+    font-size:40px;
+    font-weight:bold;
+    text-shadow: 0 0 10px rgba(0,0,0,0.05);
+    margin-bottom: 1.5rem;
+}
+
+.discussion-list {
+    list-style: none;
+    padding: 0;
+}
+
+.discussion-item {
+    margin-bottom: 10px;
+}
+
+.discussion-link {
+    display: block;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #e8f0fe;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.discussion-link:hover {
+    background-color: #d2e3fc;
+}
+
+.nom-utilisateur {
+    font-weight: bold;
+}
+
+.email-utilisateur {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.no-discussion {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.message-bubble {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.bubble-content {
+    background-color: #e8f0fe;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.bubble-author {
+    font-weight: bold;
+}
+
+.bubble-text {
+    margin-top: 5px;
+}
+
+.me {
+    justify-content: flex-end;
+}
+
+.other {
+    justify-content: flex-start;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="discussions-container">
+    <h2>Mes discussions</h2>
+    {% if discussions %}
+        <ul class="discussion-list">
+            {% for discussion in discussions %}
+                <li class="discussion-item">
+                    <div class="discussion-link">
+                        <div class="nom-utilisateur">
+                            {{ discussion.nom|default:"Privée" }}
+                        </div>
+                        <div>
+                            <a href="{% url 'historique_discussion' discussion.id %}" class="btn btn-primary btn-sm">
+                                Voir l'historique
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-discussion">Vous n'avez pas encore de discussions actives.</p>
+    {% endif %}
+</div>
+
+<div class="pagination">
+    {% if messages.has_previous %}
+        <a href="?page={{ messages.previous_page_number }}">Précédent</a>
+    {% endif %}
+    <span>Page {{ messages.number }} sur {{ messages.paginator.num_pages }}</span>
+    {% if messages.has_next %}
+        <a href="?page={{ messages.next_page_number }}">Suivant</a>
+    {% endif %}
+</div>
+
+<form method="get" class="mb-3">
+    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Rechercher dans les messages...">
+    <button type="submit">Rechercher</button>
+</form>
+{% endblock %}
+
+{% if message.expediteur == request.user %}
+    <form method="post" action="{% url 'supprimer_message' message.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+    </form>
+    <a href="{% url 'editer_message' message.id %}" class="btn btn-warning btn-sm">Éditer</a>
+{% endif %}
+
+<div class="message-bubble {% if message.expediteur == request.user %}me{% else %}other{% endif %}">
+    <img src="{{ message.expediteur.photo_profil.url|default:'/static/images/default-avatar.png' }}" class="avatar">
+    <div class="bubble-content">
+        <div class="bubble-author">{{ message.expediteur.prenom }} {{ message.expediteur.nom }}</div>
+        <div class="bubble-text">{{ message.contenu|linebreaksbr }}</div>
+    </div>
+</div>
+
+

@@ -1,0 +1,181 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Mon profil - IFRI Comotorage{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background: #f4f4f4;
+        color: #111;
+    }
+    .profile-container {
+        max-width: 500px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #111;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin: 0 auto 1rem auto;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+        border: 4px solid #222;
+    }
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    .profile-name {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 0.25rem;
+    }
+    .profile-email {
+        color: #444;
+        font-size: 1.05rem;
+        margin-bottom: 0.5rem;
+    }
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+    .section-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .info-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: #f6f6f6;
+        border-radius: 10px;
+        padding: 1rem 1.2rem;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .info-icon {
+        font-size: 1.3rem;
+        color: #111;
+        background: #eaeaea;
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .info-content h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        margin: 0 0 0.2rem 0;
+        color: #222;
+    }
+    .info-content p {
+        margin: 0;
+        color: #444;
+        font-size: 0.98rem;
+    }
+    .profile-actions {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .btn-edit {
+        background: #111;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.7rem 1.5rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-edit:hover {
+        background: #2AABEE;
+        color: #fff;
+    }
+    @media (max-width: 600px) {
+        .profile-container {
+            padding: 1.2rem 0.5rem;
+        }
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {% if user.photo_profil %}
+                <img src="{{ user.photo_profil.url }}" alt="{{ user.get_full_name }}">
+            {% else %}
+                {{ user.get_initials|default:user.nom|first|upper }}
+            {% endif %}
+        </div>
+        <div class="profile-name">{{ user.get_full_name|default:user.nom }}</div>
+        <div class="profile-email"><i class="bi bi-envelope"></i> {{ user.email }}</div>
+    </div>
+
+    <div class="profile-section">
+        <div class="section-title"><i class="bi bi-person"></i> Informations personnelles</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-icon"><i class="bi bi-telephone"></i></div>
+                <div class="info-content">
+                    <h4>Téléphone</h4>
+                    <p>{{ user.telephone|default:"Non renseigné" }}</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="bi bi-calendar"></i></div>
+                <div class="info-content">
+                    <h4>Membre depuis</h4>
+                    <p>{{ user.date_joined|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-icon"><i class="bi bi-car-front"></i></div>
+                <div class="info-content">
+                    <h4>Véhicule</h4>
+                    <p>{{ user.vehicule|default:"Non renseigné" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-actions">
+        <a href="{% url 'parametres' %}" class="btn-edit"><i class="bi bi-gear"></i> Modifier mon profil</a>
+    </div>
+</div>
+{% endblock %} 

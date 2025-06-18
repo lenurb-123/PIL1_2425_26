@@ -1,0 +1,187 @@
+{% extends 'comptes/base.html' %}
+{% load static %}
+
+{% block title %}Publier un trajet - IFRI Comotorage{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center mb-4">Publier un nouveau trajet</h2>
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="depart" name="depart" placeholder="Départ" required>
+                                    <label for="depart">Lieu de départ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="arrivee" name="arrivee" placeholder="Arrivée" required>
+                                    <label for="arrivee">Lieu d'arrivée</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="date" class="form-control" id="date" name="date" required>
+                                    <label for="date">Date du trajet</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="time" class="form-control" id="heure" name="heure" required>
+                                    <label for="heure">Heure de départ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="places" name="places" min="1" max="10" value="1" required>
+                                    <label for="places">Nombre de places disponibles</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="prix" name="prix" min="0" step="0.01" required>
+                                    <label for="prix">Prix par place (FCFA)</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="description" name="description" style="height: 100px" placeholder="Description"></textarea>
+                                    <label for="description">Description du trajet (optionnel)</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-dark btn-lg">
+                                <i class="bi bi-plus-circle me-2"></i>Publier le trajet
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Carte du trajet</h3>
+                    <div id="map" style="height: 400px;" class="rounded"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialisation de la carte
+        var map = L.map('map').setView([48.8566, 2.3522], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Validation du formulaire
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #ffffff;
+        --border-color: #e0e0e0;
+        --text-color: #000000;
+        --background-color: #ffffff;
+        --hover-color: #333333;
+    }
+
+    body {
+        background: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .card {
+        background: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+    .form-control {
+        border: 1px solid var(--border-color);
+        background: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        color: var(--primary-color);
+    }
+
+    .btn-dark {
+        background: var(--primary-color);
+        color: var(--secondary-color);
+        border: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dark:hover {
+        background: var(--hover-color);
+        color: var(--secondary-color);
+        transform: translateY(-1px);
+    }
+
+    #map {
+        border: 1px solid var(--border-color);
+    }
+
+    .form-floating > label {
+        color: #666;
+    }
+
+    .form-control::placeholder {
+        color: #999;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: #dc3545;
+    }
+
+    .was-validated .form-control:valid {
+        border-color: #198754;
+    }
+</style>
+{% endblock %} 
