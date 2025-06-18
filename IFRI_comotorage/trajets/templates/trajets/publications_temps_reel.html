@@ -1,0 +1,35 @@
+{% extends 'comptes/base.html' %}
+{% block content %}
+<div class="container">
+    <h2>Publications en temps réel</h2>
+    <h3>Conducteurs</h3>
+    <ul id="conducteurs-list"></ul>
+    <h3>Passagers</h3>
+    <ul id="passagers-list"></ul>
+</div>
+<script>
+function rafraichirTrajets() {
+    fetch("{% url 'trajets_en_temps_reel' %}")
+        .then(response => response.json())
+        .then(data => {
+            let conducteurs = data.conducteurs.map(t =>
+                `<li>
+                    <b>${t.lieu_depart}</b> → <b>${t.lieu_arrivee}</b>
+                    à ${t.heure_depart ? t.heure_depart : ''} | Places: ${t.places_disponibles ? t.places_disponibles : ''} | Tarif: ${t.tarif} FCFA
+                </li>`
+            ).join('');
+            let passagers = data.passagers.map(t =>
+                `<li>
+                    <b>${t.lieu_depart}</b> → <b>${t.lieu_arrivee}</b>
+                    à ${t.heure_souhaitee ? t.heure_souhaitee : ''} | Tarif: ${t.tarif} FCFA
+                </li>`
+            ).join('');
+            document.getElementById('conducteurs-list').innerHTML = conducteurs;
+            document.getElementById('passagers-list').innerHTML = passagers;
+        });
+}
+// Rafraîchit toutes les 5 secondes
+setInterval(rafraichirTrajets, 5000);
+rafraichirTrajets();
+</script>
+{% endblock %} 
