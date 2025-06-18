@@ -118,7 +118,7 @@ ___
    
      - Compte superutilistateur
         - Email : admin@gmail.com
-        -  Mot de passe : admin123 
+        -  Mot de passe : brunel@123 
 
      - Compte 1 : Compte passager 
         - Email : kpogbemebrunel@gmail.com
